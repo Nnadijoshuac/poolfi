@@ -422,8 +422,8 @@ const POOL_MANAGER_ABI = [
   }
 ] as const
 
-// Contract addresses - Will be updated after deployment
-const POOL_MANAGER_ADDRESS = process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS as `0x${string}`
+// Contract addresses - Deployed contract address
+const POOL_MANAGER_ADDRESS = process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS as `0x${string}` || '0xd9145CCE52D386f254917e481eB44e9943F39138'
 
 // Check if contract is deployed
 const isPoolManagerDeployed = POOL_MANAGER_ADDRESS && POOL_MANAGER_ADDRESS !== '0x0000000000000000000000000000000000000000'
