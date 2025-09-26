@@ -43,6 +43,21 @@ export default function CreatePoolModal({ isOpen, onClose }: CreatePoolModalProp
       return
     }
 
+    if (!formData.totalPool || parseFloat(formData.totalPool) <= 0) {
+      toast.error('Please enter a valid total pool amount')
+      return
+    }
+
+    if (!formData.contributionAmount || parseFloat(formData.contributionAmount) <= 0) {
+      toast.error('Please enter a valid contribution amount')
+      return
+    }
+
+    if (parseFloat(formData.contributionAmount) >= parseFloat(formData.totalPool)) {
+      toast.error('Contribution amount must be less than total pool amount')
+      return
+    }
+
     // Calculate deadline (30 days from now)
     const deadline = Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60)
 
@@ -116,26 +131,40 @@ export default function CreatePoolModal({ isOpen, onClose }: CreatePoolModalProp
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Total Pool
+              Total Pool (REEF)
             </label>
             <input
-              type="text"
-              placeholder="$100"
+              type="number"
+              placeholder="100"
+              min="0"
+              step="0.01"
               value={formData.totalPool}
-              onChange={(e) => setFormData({ ...formData, totalPool: e.target.value })}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                  setFormData({ ...formData, totalPool: value });
+                }
+              }}
               className="input-field"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Contribution Amount
+              Contribution Amount (REEF)
             </label>
             <input
-              type="text"
-              placeholder="$10"
+              type="number"
+              placeholder="10"
+              min="0"
+              step="0.01"
               value={formData.contributionAmount}
-              onChange={(e) => setFormData({ ...formData, contributionAmount: e.target.value })}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                  setFormData({ ...formData, contributionAmount: value });
+                }
+              }}
               className="input-field"
             />
           </div>
