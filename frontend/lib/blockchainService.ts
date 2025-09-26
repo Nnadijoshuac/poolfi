@@ -147,8 +147,8 @@ export class BlockchainService {
 
 // Utility function to create blockchain service instance
 export function createBlockchainService(): BlockchainService | null {
-  const rpcUrl = process.env.NEXT_PUBLIC_REEF_RPC_URL
-  const contractAddress = process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS
+  const rpcUrl = process.env.NEXT_PUBLIC_REEF_RPC_URL || 'https://rpc.reefscan.com'
+  const contractAddress = process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS || '0xd9145CCE52D386f254917e481eB44e9943F39138'
 
   if (!rpcUrl || !contractAddress || contractAddress === '0x0000000000000000000000000000000000000000') {
     return null
