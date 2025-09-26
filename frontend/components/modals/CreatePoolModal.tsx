@@ -38,21 +38,18 @@ export default function CreatePoolModal({ isOpen, onClose }: CreatePoolModalProp
   const handleCreatePool = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!poolDetails.poolName || !poolDetails.description) {
-      toast.error('Please fill in all required fields')
+    if (!poolDetails.poolName) {
+      toast.error('Please fill in pool name')
       return
     }
 
-    // Skip contract deployment check for demo mode
-    // In production, this would check for deployed contracts
-
-    // Calculate deadline (30 days from now for demo)
+    // Calculate deadline (30 days from now)
     const deadline = Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60)
 
     try {
       await createPool({
         name: poolDetails.poolName,
-        description: poolDetails.description,
+        description: poolDetails.description || `Pool created by ${poolDetails.poolName}`,
         targetAmount: formData.totalPool,
         contributionAmount: formData.contributionAmount,
         maxMembers: formData.memberCount,

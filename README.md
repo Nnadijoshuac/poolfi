@@ -1,35 +1,61 @@
-# PoolFi - Collaborative Savings Platform
+# PoolFi - Reef Savings Platform
 
-A decentralized collaborative savings platform built on the Reef Network, enabling users to create and join savings pools with friends, family, or communities.
+A decentralized savings platform built on Reef blockchain that allows users to create, join, and manage savings pools with friends and family.
 
-## 🌟 Features
+## 🌊 Built for Reef Ecosystem
+
+This project is specifically designed for the Reef blockchain ecosystem, featuring:
+- **Reef Pelagia Network** support
+- **REEF token** integration
+- **Reef-specific** wallet connections
+- **Optimized** for Reef's EVM compatibility
+
+## 🚀 Features
 
 ### Core Functionality
-- **Create Pools**: Set up collaborative savings pools with custom parameters
-- **Join Pools**: Become a member of existing pools
-- **Make Contributions**: Contribute REEF tokens to pools
-- **Track Progress**: Monitor pool progress and member activities
-- **Real-time Updates**: Live activity feed and notifications
+- **Create Savings Pools**: Set target amounts, deadlines, and member limits
+- **Join & Contribute**: Atomic join and contribute operations
+- **Pool Management**: Cancel pools after deadline if target not met
+- **Withdraw Funds**: Withdraw contributions after pool completion or cancellation
+- **Real-time Tracking**: Live blockchain event monitoring
 
-### Technical Features
-- **Multi-wallet Support**: MetaMask, WalletConnect, and more
-- **Reef Network Integration**: Built specifically for Reef blockchain
-- **Responsive Design**: Works on desktop and mobile
-- **Real-time Data**: Live blockchain event tracking
-- **Secure**: Smart contract-based, no central authority
+### Security Features
+- **Atomic Operations**: Prevents front-running attacks
+- **Smart Contract Security**: Audited contract patterns
+- **Withdrawal Protection**: Safe fund recovery mechanisms
 
-## 🏗 Project Structure
+### User Experience
+- **Modern UI**: Built with Next.js and Tailwind CSS
+- **Wallet Integration**: RainbowKit and WalletConnect support
+- **Responsive Design**: Works on all devices
+- **Real-time Updates**: Live activity tracking
+
+## 🏗️ Architecture
+
+### Frontend
+- **Framework**: Next.js 14
+- **Styling**: Tailwind CSS
+- **Wallet**: RainbowKit + WalletConnect
+- **Blockchain**: Wagmi + Viem
+- **State Management**: React hooks
+
+### Smart Contracts
+- **Language**: Solidity ^0.8.20
+- **Network**: Reef Pelagia (Chain ID: 13939)
+- **Features**: Gas-optimized, event-driven
+
+## 📁 Project Structure
 
 ```
 poolfi/
 ├── frontend/                 # Next.js frontend application
-│   ├── app/                 # Next.js 14 App Router
+│   ├── app/                 # App router pages
 │   ├── components/          # React components
 │   ├── hooks/              # Custom React hooks
 │   ├── lib/                # Utility libraries
 │   └── public/             # Static assets
-├── smart-contracts/         # Solidity smart contracts
-│   ├── contracts/          # Contract source code
+├── smart-contracts/        # Solidity smart contracts
+│   ├── contracts/          # Contract source files
 │   ├── scripts/            # Deployment scripts
 │   └── test/               # Contract tests
 └── README.md               # This file
@@ -38,76 +64,74 @@ poolfi/
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-- MetaMask or compatible wallet
-- REEF tokens for testing
+- Node.js 18+
+- MetaMask wallet
+- REEF tokens (for testing)
 
-### 1. Clone Repository
-```bash
-git clone <repository-url>
-cd poolfi
-```
-
-### 2. Frontend Setup
+### Frontend Setup
 ```bash
 cd frontend
 npm install
-cp env.example .env.local
-# Update .env.local with your values
 npm run dev
 ```
 
-### 3. Smart Contracts (Optional)
+### Smart Contract Setup
 ```bash
 cd smart-contracts
 npm install
-# Deploy contracts if needed
+npx hardhat compile
 ```
 
-## 🌐 Live Application
+## 🌐 Network Configuration
 
-### Production URL
-- **Frontend**: [Your Vercel URL]
-- **Contract**: `0xd9145CCE52D386f254917e481eB44e9943F39138`
-- **Network**: Reef Testnet (Chain ID: 13940)
+### Reef Pelagia (Development)
+- **RPC URL**: `http://34.123.142.246:8545`
+- **Chain ID**: `13939`
+- **Currency**: REEF
+- **Explorer**: `https://dev.papi.how/explorer`
 
-### Test the Application
-1. **Connect Wallet**: Connect MetaMask to Reef Testnet
-2. **Get Test Tokens**: Use Reef Testnet faucet
-3. **Create Pool**: Set up your first savings pool
-4. **Invite Friends**: Share pool details with others
-5. **Make Contributions**: Add REEF tokens to the pool
+### Adding to MetaMask
+1. Open MetaMask
+2. Add Custom Network
+3. Enter the network details above
+4. Save and switch to Reef Pelagia
 
-## 🛠 Technology Stack
+## 🔧 Environment Variables
 
-### Frontend
-- **Framework**: Next.js 14 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Wallet Integration**: RainbowKit + Wagmi
-- **Blockchain**: Viem
-- **Deployment**: Vercel
+Create `.env.local` in the frontend directory:
 
-### Smart Contracts
-- **Language**: Solidity ^0.8.20
-- **Network**: Reef Network
-- **Framework**: Hardhat
-- **Testing**: JavaScript/TypeScript
+```bash
+# Smart Contract Address (after deployment)
+NEXT_PUBLIC_POOL_MANAGER_ADDRESS=0x...
 
-## 📱 Screenshots
+# WalletConnect Project ID
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
 
-### Desktop View
-- Clean, modern interface
-- Intuitive pool management
-- Real-time activity tracking
+# Reef Network Configuration
+NEXT_PUBLIC_REEF_RPC_URL=http://34.123.142.246:8545
+NEXT_PUBLIC_REEF_CHAIN_ID=13939
+```
 
-### Mobile View
-- Responsive design
-- Touch-friendly interactions
-- Full functionality on mobile
+## 📱 Usage
 
-## 🔧 Development
+### Creating a Pool
+1. Connect your wallet
+2. Click "Create Pool"
+3. Set target amount, deadline, and max members
+4. Confirm transaction
+
+### Joining a Pool
+1. Browse available pools
+2. Click "Join Pool"
+3. Enter contribution amount
+4. Confirm transaction
+
+### Managing Pools
+- View pool details
+- Track contributions
+- Withdraw funds when eligible
+
+## 🛠️ Development
 
 ### Frontend Development
 ```bash
@@ -115,108 +139,76 @@ cd frontend
 npm run dev          # Start development server
 npm run build        # Build for production
 npm run lint         # Run ESLint
-npm run type-check   # TypeScript checking
 ```
 
 ### Smart Contract Development
 ```bash
 cd smart-contracts
-npm run compile      # Compile contracts
-npm run test         # Run tests
-npm run deploy       # Deploy contracts
+npx hardhat compile  # Compile contracts
+npx hardhat test     # Run tests
+npx hardhat deploy   # Deploy contracts
 ```
+
+## 🧪 Testing
+
+### Frontend Testing
+- Manual testing with MetaMask
+- Wallet connection testing
+- UI/UX validation
+
+### Smart Contract Testing
+- Unit tests for all functions
+- Event emission testing
+- Edge case validation
 
 ## 🚀 Deployment
 
 ### Frontend (Vercel)
-1. Connect GitHub repository to Vercel
-2. Set root directory to `frontend`
-3. Configure environment variables
-4. Deploy automatically
+```bash
+cd frontend
+npm run build
+npm run deploy:vercel
+```
 
-### Smart Contracts (Remix)
-1. Open [Remix IDE](https://remix.ethereum.org)
-2. Copy contract code
-3. Compile with Solidity 0.8.20
-4. Deploy to Reef Network
+### Smart Contract (Reef Pelagia)
+1. Deploy using Remix IDE
+2. Verify contract on explorer
+3. Update frontend environment variables
 
-## 🔒 Security
+## 🔒 Security Considerations
 
-- **Smart Contract Audits**: Contracts are open source and auditable
-- **Wallet Security**: No private key storage
-- **Input Validation**: Client and server-side validation
-- **Access Control**: Role-based permissions
-
-## 📊 Contract Details
-
-### SimplePoolManager Contract
-- **Address**: `0xd9145CCE52D386f254917e481eB44e9943F39138`
-- **Network**: Reef Testnet
-- **Functions**: Create, join, contribute, manage pools
-- **Events**: PoolCreated, MemberJoined, ContributionMade, PoolCompleted
-
-### Gas Costs
-- **Create Pool**: ~50,000 gas
-- **Join Pool**: ~30,000 gas
-- **Contribute**: ~25,000 gas
-- **View Functions**: Free (read-only)
+- **Private Key Security**: Never commit private keys
+- **Contract Verification**: Verify all deployed contracts
+- **Access Control**: Proper permission management
+- **Input Validation**: Comprehensive input sanitization
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests if applicable
+4. Test thoroughly
 5. Submit a pull request
-
-### Development Guidelines
-- Follow TypeScript best practices
-- Use meaningful commit messages
-- Add documentation for new features
-- Test thoroughly before submitting
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file for details
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🆘 Support
+## 🏆 Hackathon Submission
 
-### Getting Help
-- **Documentation**: Check the README files
-- **Issues**: Create GitHub issues for bugs
-- **Discussions**: Use GitHub discussions for questions
+This project was built for the Reef hackathon, showcasing:
+- **Reef Ecosystem Integration**
+- **Innovative Savings Platform**
+- **User-Friendly Interface**
+- **Secure Smart Contracts**
 
-### Common Issues
-- **Wallet Connection**: Ensure you're on Reef network
-- **Transaction Failures**: Check gas fees and balance
-- **Contract Errors**: Verify contract address and network
+## 📞 Support
 
-## 🔮 Roadmap
-
-### Phase 1 (Current)
-- ✅ Basic pool creation and management
-- ✅ Wallet integration
-- ✅ Real-time activity tracking
-
-### Phase 2 (Planned)
-- 🔄 Advanced pool features
-- 🔄 Mobile app
-- 🔄 Analytics dashboard
-
-### Phase 3 (Future)
-- 🔄 Cross-chain support
-- 🔄 DeFi integrations
-- 🔄 Governance features
-
-## 📞 Contact
-
-- **Project**: PoolFi
-- **Network**: Reef Network
-- **Repository**: [GitHub Link]
-- **Issues**: [GitHub Issues]
+For questions or support:
+- Create an issue in the repository
+- Contact the development team
+- Check the documentation
 
 ---
 
-**PoolFi** - Collaborative Savings on Reef Network 🐠
-
-*Built with ❤️ for the Reef community*
+**Built with ❤️ for the Reef Ecosystem**

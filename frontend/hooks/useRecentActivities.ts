@@ -5,7 +5,7 @@ import { createBlockchainService, formatEventData } from '../lib/blockchainServi
 // Activity types
 export interface Activity {
   id: string
-  type: 'contribution' | 'withdrawal' | 'join' | 'create' | 'complete'
+  type: 'contribution' | 'withdrawal' | 'join' | 'create' | 'complete' | 'cancel'
   title: string
   description: string
   amount?: string
@@ -119,6 +119,12 @@ export function useRecentActivities() {
           icon: '/recent activities.png',
           iconBg: 'bg-yellow-100',
           iconColor: 'text-yellow-600'
+        }
+      case 'cancel':
+        return {
+          icon: '/recent activities.png',
+          iconBg: 'bg-red-100',
+          iconColor: 'text-red-600'
         }
       default:
         return {

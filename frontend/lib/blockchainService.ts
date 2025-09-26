@@ -17,7 +17,7 @@ export interface EventFilter {
   topics?: string[]
 }
 
-// Event ABI definitions for filtering
+// Event ABI definitions for filtering (BasicPool events)
 export const POOL_EVENTS_ABI = [
   {
     "anonymous": false,
@@ -33,10 +33,14 @@ export const POOL_EVENTS_ABI = [
     "anonymous": false,
     "inputs": [
       {"indexed": true, "internalType": "uint256", "name": "poolId", "type": "uint256"},
-      {"indexed": true, "internalType": "address", "name": "member", "type": "address"},
-      {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"}
+      {"indexed": true, "internalType": "address", "name": "creator", "type": "address"},
+      {"indexed": false, "internalType": "string", "name": "name", "type": "string"},
+      {"indexed": false, "internalType": "uint256", "name": "targetAmount", "type": "uint256"},
+      {"indexed": false, "internalType": "uint256", "name": "contributionAmount", "type": "uint256"},
+      {"indexed": false, "internalType": "uint256", "name": "maxMembers", "type": "uint256"},
+      {"indexed": false, "internalType": "uint256", "name": "deadline", "type": "uint256"}
     ],
-    "name": "FundsWithdrawn",
+    "name": "PoolCreated",
     "type": "event"
   },
   {
@@ -46,20 +50,6 @@ export const POOL_EVENTS_ABI = [
       {"indexed": true, "internalType": "address", "name": "member", "type": "address"}
     ],
     "name": "MemberJoined",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {"indexed": true, "internalType": "uint256", "name": "poolId", "type": "uint256"},
-      {"indexed": true, "internalType": "address", "name": "creator", "type": "address"},
-      {"indexed": false, "internalType": "string", "name": "name", "type": "string"},
-      {"indexed": false, "internalType": "uint256", "name": "targetAmount", "type": "uint256"},
-      {"indexed": false, "internalType": "uint256", "name": "contributionAmount", "type": "uint256"},
-      {"indexed": false, "internalType": "uint256", "name": "maxMembers", "type": "uint256"},
-      {"indexed": false, "internalType": "uint256", "name": "deadline", "type": "uint256"}
-    ],
-    "name": "PoolCreated",
     "type": "event"
   },
   {
@@ -159,7 +149,7 @@ export function createBlockchainService(): BlockchainService | null {
 
 // Helper function to format event data
 export function formatEventData(event: BlockchainEvent): {
-  type: 'contribution' | 'withdrawal' | 'join' | 'create' | 'complete'
+  type: 'contribution' | 'withdrawal' | 'join' | 'create' | 'complete' | 'cancel'
   title: string
   description: string
   amount?: string
@@ -177,17 +167,6 @@ export function formatEventData(event: BlockchainEvent): {
         type: 'contribution',
         title: 'Contribution Made',
         description: `You contributed to pool #${poolId}`,
-        amount: `${formatEther(event.args.amount)} REEF`,
-        poolId,
-        timestamp,
-        transactionHash: event.transactionHash
-      }
-
-    case 'FundsWithdrawn':
-      return {
-        type: 'withdrawal',
-        title: 'Funds Withdrawn',
-        description: `You withdrew from pool #${poolId}`,
         amount: `${formatEther(event.args.amount)} REEF`,
         poolId,
         timestamp,
