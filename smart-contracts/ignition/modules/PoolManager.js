@@ -1,0 +1,11 @@
+const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
+
+module.exports = buildModule("PoolManagerModule", (m) => {
+  // Deploy MockREEF token first
+  const mockREEF = m.contract("MockREEF", ["Mock REEF Token", "MREEF", "1000000000000000000000000"]); // 1M tokens with 18 decimals
+
+  // Deploy PoolManager with MockREEF address
+  const poolManager = m.contract("PoolManager", [mockREEF]);
+
+  return { mockREEF, poolManager };
+});

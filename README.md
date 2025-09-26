@@ -1,160 +1,72 @@
-# PoolFi 💰
+# PoolFi - Collaborative Savings Platform
 
-A modern, mobile-first web application for managing savings pools and collaborative financial planning. Built with Next.js 14 and TypeScript, PoolFi provides an intuitive interface for creating, joining, and managing investment pools with friends, family, or colleagues.
-
-## ✨ Features
-
-### 🏦 Wallet Management
-- **Digital Wallet**: View your USDC balance and wallet address
-- **Fund Wallet**: Add funds to your wallet with ease
-- **Withdraw Funds**: Withdraw your earnings when needed
-- **Send Crypto**: Transfer funds to other users
-
-### 🎯 Pool Management
-- **Create Pools**: Set up new savings pools with custom parameters
-- **Join Pools**: Discover and join existing pools
-- **Pool Details**: Comprehensive pool information including:
-  - Member management and roles
-  - Contribution tracking
-  - Payout schedules
-  - Activity history
-- **Real-time Progress**: Visual progress indicators for pool completion
-
-### 📊 Portfolio Tracking
-- **Earnings Overview**: Track your weekly earnings
-- **Pool Statistics**: Monitor your active pools and contributions
-- **Recent Activities**: Stay updated with pool activities and transactions
-
-### 🎨 Modern UI/UX
-- **Mobile-First Design**: Optimized for mobile devices
-- **Responsive Layout**: Seamless experience across all screen sizes
-- **Intuitive Navigation**: Easy-to-use interface with clear visual hierarchy
-- **Color-Coded Information**: Visual indicators for different types of data
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn package manager
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/poolfi.git
-   cd poolfi
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-
-4. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000) to view the application.
-
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Font**: Inter (Google Fonts)
-- **Icons**: Custom SVG icons and PNG assets
-- **State Management**: React Hooks (useState, useEffect)
+A decentralized savings platform built on Reef Network that allows users to create and join collaborative savings pools.
 
 ## 📁 Project Structure
 
 ```
 poolfi/
-├── app/
-│   ├── globals.css          # Global styles and CSS variables
-│   ├── layout.tsx           # Root layout component
-│   ├── page.tsx             # Home page
-│   └── pool/
-│       └── [id]/
-│           └── page.tsx     # Dynamic pool detail pages
-├── components/
-│   ├── PageHeader.tsx       # Reusable header component
-│   ├── WalletCard.tsx       # Wallet display component
-│   ├── ActionButtons.tsx    # Action button group
-│   ├── PortfolioCard.tsx    # Portfolio overview
-│   ├── PoolOptions.tsx      # Create/Join pool options
-│   ├── PoolsGrid.tsx        # User pools grid
-│   ├── RecentActivities.tsx # Activity feed
-│   └── modals/
-│       ├── CreatePoolModal.tsx
-│       ├── JoinPoolModal.tsx
-│       ├── FundWalletModal.tsx
-│       ├── WithdrawFundsModal.tsx
-│       ├── SendCryptoModal.tsx
-│       ├── SendCryptoAmountModal.tsx
-│       └── InviteMembersModal.tsx
-├── public/
-│   ├── logo.png
-│   ├── pool profile.png
-│   └── [other assets]
-└── [config files]
+├── frontend/                 # Next.js Frontend Application
+│   ├── app/                 # Next.js App Router
+│   ├── components/          # React Components
+│   ├── hooks/              # Custom React Hooks
+│   ├── public/             # Static Assets
+│   ├── package.json        # Frontend Dependencies
+│   └── ...
+├── smart-contracts/        # Solidity Smart Contracts
+│   ├── contracts/          # Solidity Contract Files
+│   ├── scripts/            # Deployment Scripts
+│   ├── hardhat.config.js   # Hardhat Configuration
+│   ├── package.json        # Smart Contract Dependencies
+│   └── ...
+└── README.md               # This File
 ```
 
-## 🎨 Design System
+## 🚀 Quick Start
 
-### Colors
-- **Primary Background**: `#eff6ff` (Light Blue)
-- **Card Background**: `#ffffff` (White)
-- **Borders**: `#d9e3f6` (Light Blue Border)
-- **Text Primary**: `#141b34` (Dark Blue)
-- **Contribution**: `#7fd1b9` (Green)
-- **Payout Date**: `#eac382` (Orange)
-- **Accent**: `#4264e5` (Blue)
+### Frontend Development
 
-### Typography
-- **Font Family**: Inter (Google Fonts)
-- **Pool Names**: Semi-bold, 16px, `#141b34`
-- **Labels**: Semi-bold, 8px
-- **Body Text**: Regular, 12px
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-## 🔧 Available Scripts
+The frontend will be available at `http://localhost:3001`
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
+### Smart Contract Development
 
-## 📱 Mobile-First Approach
+```bash
+cd smart-contracts
+npm install
+npm run compile
+npm run deploy:pelagia
+```
 
-PoolFi is designed with a mobile-first approach, ensuring optimal performance and user experience on mobile devices while maintaining compatibility with desktop browsers.
+## 🏗️ Architecture
 
-## 🤝 Contributing
+- **Frontend**: Next.js 14 with TypeScript, Tailwind CSS, Wagmi v2, RainbowKit
+- **Smart Contracts**: Solidity with OpenZeppelin, Hardhat
+- **Network**: Reef Pelagia Testnet (Chain ID: 13939)
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+## 📱 Features
+
+- Create collaborative savings pools
+- Join existing pools
+- Real-time pool management
+- Wallet integration with Reef Network
+- Mobile-first responsive design
+
+## 🌐 Network Configuration
+
+- **Reef Pelagia Testnet**: `http://34.123.142.246:8545`
+- **Chain ID**: 13939
+- **Currency**: REEF
+
+## 🎯 Web3Conf Enugu
+
+This project was built for Web3Conf Enugu 2024, showcasing DeFi innovation on the Reef Network.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Built with [Next.js](https://nextjs.org/)
-- Styled with [Tailwind CSS](https://tailwindcss.com/)
-- Icons and assets designed for optimal mobile experience
-
-## 📞 Support
-
-For support, email support@poolfi.com or create an issue in this repository.
-
----
-
-**PoolFi** - Making collaborative savings simple and accessible for everyone. 💙
+MIT License - see LICENSE file for details

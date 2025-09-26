@@ -15,7 +15,7 @@ import WithdrawFundsModal from '@/components/modals/WithdrawFundsModal'
 import SendCryptoModal from '@/components/modals/SendCryptoModal'
 import SendCryptoAmountModal from '@/components/modals/SendCryptoAmountModal'
 import ReefInfo from '@/components/ReefInfo'
-import { useDemoPoolManager } from '@/hooks/useDemoPoolManager'
+import { usePoolManager } from '@/hooks/usePoolManager'
 
 export default function Dashboard() {
   const [showCreateModal, setShowCreateModal] = useState(false)
@@ -26,8 +26,8 @@ export default function Dashboard() {
   const [showSendCryptoAmountModal, setShowSendCryptoAmountModal] = useState(false)
   const [cryptoAddress, setCryptoAddress] = useState('')
   
-  // Use real data from demo hooks
-  const { pools, poolCount } = useDemoPoolManager()
+  // Use real data from smart contract
+  const { pools, poolCount, isContractDeployed } = usePoolManager()
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#eff6ff' }}>
