@@ -1,63 +1,76 @@
 # PoolFi Frontend Deployment Guide
 
+## Vercel Deployment
+
 This guide will help you deploy the PoolFi frontend to Vercel.
 
-## Prerequisites
+### Prerequisites
 
 1. **Vercel Account**: Sign up at [vercel.com](https://vercel.com)
-2. **GitHub Repository**: Push your code to GitHub
-3. **WalletConnect Project ID**: Get one from [cloud.walletconnect.com](https://cloud.walletconnect.com)
-4. **Smart Contract Addresses**: Deploy your contracts and get the addresses
+2. **GitHub Repository**: Your code should be pushed to GitHub
+3. **Environment Variables**: Prepare the required environment variables
 
-## Deployment Steps
+### Required Environment Variables
 
-### 1. Prepare Environment Variables
+Set these in your Vercel dashboard under Project Settings > Environment Variables:
 
-Before deploying, you need to set up the following environment variables in Vercel:
+```bash
+# Smart Contract Addresses (Update after deployment)
+NEXT_PUBLIC_POOL_MANAGER_ADDRESS=0x0000000000000000000000000000000000000000
 
-#### Required Variables:
-- `NEXT_PUBLIC_POOL_MANAGER_ADDRESS`: Your deployed PoolManager contract address
-- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`: Your WalletConnect project ID
-- `NEXT_PUBLIC_REEF_RPC_URL`: Reef network RPC URL (use `https://rpc.reefscan.com` for production)
-- `NEXT_PUBLIC_REEF_CHAIN_ID`: Reef chain ID (`13939` for mainnet)
+# WalletConnect Project ID (Get from https://cloud.walletconnect.com/)
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id_here
 
-#### Optional Variables:
-- `NEXT_PUBLIC_GA_ID`: Google Analytics ID for tracking
-- `NEXT_PUBLIC_SENTRY_DSN`: Sentry DSN for error monitoring
+# Reef Network Configuration
+NEXT_PUBLIC_REEF_RPC_URL=https://rpc.reefscan.com
+NEXT_PUBLIC_REEF_CHAIN_ID=13939
 
-### 2. Deploy to Vercel
+# Production optimizations
+NODE_ENV=production
+NEXT_TELEMETRY_DISABLED=1
+```
 
-#### Option A: Deploy via Vercel Dashboard (Recommended)
+### Deployment Steps
 
-1. Go to [vercel.com/dashboard](https://vercel.com/dashboard)
-2. Click "New Project"
-3. Import your GitHub repository
-4. Set the following:
+#### Option 1: Deploy via Vercel Dashboard (Recommended)
+
+1. **Connect Repository**:
+   - Go to [vercel.com/dashboard](https://vercel.com/dashboard)
+   - Click "New Project"
+   - Import your GitHub repository: `Nnadijoshuac/poolfi`
+
+2. **Configure Project**:
    - **Framework Preset**: Next.js
    - **Root Directory**: `frontend`
    - **Build Command**: `npm run build`
    - **Output Directory**: `.next`
-5. Add your environment variables in the "Environment Variables" section
-6. Click "Deploy"
 
-#### Option B: Deploy via Vercel CLI
+3. **Set Environment Variables**:
+   - Add all required environment variables listed above
+   - Make sure to set them for Production, Preview, and Development
 
-1. Install Vercel CLI:
+4. **Deploy**:
+   - Click "Deploy"
+   - Wait for the build to complete
+
+#### Option 2: Deploy via Vercel CLI
+
+1. **Install Vercel CLI**:
    ```bash
-   npm i -g vercel
+   npm install -g vercel
    ```
 
-2. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-
-3. Login to Vercel:
+2. **Login to Vercel**:
    ```bash
    vercel login
    ```
 
-4. Deploy:
+3. **Navigate to Frontend Directory**:
+   ```bash
+   cd frontend
+   ```
+
+4. **Deploy**:
    ```bash
    # For preview deployment
    vercel
@@ -66,98 +79,99 @@ Before deploying, you need to set up the following environment variables in Verc
    vercel --prod
    ```
 
-### 3. Configure Custom Domain (Optional)
+### Post-Deployment Configuration
 
-1. Go to your project settings in Vercel dashboard
-2. Navigate to "Domains" section
-3. Add your custom domain
-4. Follow the DNS configuration instructions
+1. **Update Smart Contract Addresses**:
+   - After deploying your smart contracts, update the `NEXT_PUBLIC_POOL_MANAGER_ADDRESS` in Vercel
+   - Redeploy the frontend
 
-## Build Optimization
+2. **Configure Custom Domain** (Optional):
+   - Go to Project Settings > Domains
+   - Add your custom domain
+   - Configure DNS records as instructed
 
-The project is configured with several optimizations for production:
+3. **Set up Analytics** (Optional):
+   - Enable Vercel Analytics in Project Settings
+   - Or integrate Google Analytics by adding `NEXT_PUBLIC_GA_ID`
 
-- **Image Optimization**: WebP and AVIF formats with caching
-- **Code Splitting**: Automatic vendor and common chunk splitting
-- **Security Headers**: X-Frame-Options, X-Content-Type-Options, etc.
-- **Compression**: Gzip compression enabled
-- **Bundle Analysis**: Use `npm run analyze` to analyze bundle size
+### Build Optimization
 
-## Monitoring and Analytics
+The project is configured with:
+- **Next.js 14** with App Router
+- **TypeScript** for type safety
+- **Tailwind CSS** for styling
+- **Wagmi** for Web3 integration
+- **RainbowKit** for wallet connection
 
-### Bundle Analysis
-```bash
-npm run analyze
-```
+### Troubleshooting
 
-### Type Checking
-```bash
-npm run type-check
-```
-
-### Linting
-```bash
-npm run lint
-```
-
-## Troubleshooting
-
-### Common Issues:
+#### Common Issues:
 
 1. **Build Failures**:
    - Check that all environment variables are set
-   - Ensure all dependencies are installed
-   - Check for TypeScript errors with `npm run type-check`
+   - Ensure Node.js version is 18+ in Vercel settings
+   - Check build logs for specific errors
 
 2. **Wallet Connection Issues**:
-   - Verify WalletConnect Project ID is correct
-   - Check that RPC URLs are accessible
-   - Ensure chain ID matches your network
+   - Verify `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` is correct
+   - Check that the project ID is from the correct network
 
-3. **Contract Interaction Issues**:
-   - Verify contract addresses are correct
-   - Check that contracts are deployed on the correct network
-   - Ensure user has sufficient REEF tokens for gas
+3. **Smart Contract Issues**:
+   - Ensure `NEXT_PUBLIC_POOL_MANAGER_ADDRESS` is the correct deployed address
+   - Verify the contract is deployed on the correct network (Reef)
 
-### Performance Optimization:
+#### Performance Optimization:
 
-1. **Enable Vercel Analytics** in project settings
-2. **Set up monitoring** with Sentry or similar service
-3. **Use Vercel's Edge Functions** for API routes if needed
-4. **Optimize images** using Next.js Image component
+1. **Enable Vercel Analytics** for performance monitoring
+2. **Use Vercel Edge Functions** for API routes if needed
+3. **Configure caching** in `vercel.json` for static assets
 
-## Environment-Specific Configurations
+### Environment-Specific Configurations
 
-### Development
-- Uses local RPC URL for testing
-- Includes testnet configurations
-- Hot reloading enabled
+#### Development
+- Uses local RPC URL
+- Debug mode enabled
+- Hot reload enabled
 
-### Production
-- Uses mainnet RPC URLs
-- Optimized builds
-- Security headers enabled
-- Analytics and monitoring ready
+#### Preview
+- Uses production RPC URL
+- Debug mode disabled
+- Optimized for testing
 
-## Security Considerations
+#### Production
+- Uses production RPC URL
+- All optimizations enabled
+- Analytics and monitoring active
 
-1. **Environment Variables**: Never commit sensitive data to git
-2. **CSP Headers**: Configured for SVG images
-3. **Security Headers**: X-Frame-Options, X-Content-Type-Options set
-4. **HTTPS**: Automatically enabled on Vercel
+### Security Considerations
 
-## Support
+The deployment includes:
+- Security headers in `vercel.json`
+- Content Security Policy
+- XSS protection
+- Frame options protection
+- Referrer policy
 
-For deployment issues:
-1. Check Vercel deployment logs
-2. Verify environment variables
-3. Test locally with production build: `npm run build && npm start`
-4. Check browser console for client-side errors
+### Monitoring and Maintenance
 
-## Next Steps After Deployment
+1. **Monitor Performance**:
+   - Use Vercel Analytics
+   - Monitor Core Web Vitals
+   - Check error rates
 
-1. **Test all functionality** on the deployed site
-2. **Set up monitoring** and error tracking
-3. **Configure analytics** if needed
-4. **Update documentation** with live URLs
-5. **Set up CI/CD** for automatic deployments
+2. **Regular Updates**:
+   - Keep dependencies updated
+   - Monitor for security vulnerabilities
+   - Update smart contract addresses as needed
+
+### Support
+
+For issues related to:
+- **Vercel Deployment**: Check Vercel documentation
+- **Next.js**: Check Next.js documentation
+- **Web3 Integration**: Check Wagmi/RainbowKit docs
+- **Reef Network**: Check Reef documentation
+
+---
+
+**Note**: Make sure to test your deployment thoroughly in preview mode before promoting to production.

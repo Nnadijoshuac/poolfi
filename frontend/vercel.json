@@ -1,11 +1,8 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
   "functions": {
     "app/**/*.tsx": {
       "maxDuration": 30
@@ -15,7 +12,9 @@
     "NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID": "@walletconnect_project_id",
     "NEXT_PUBLIC_POOL_MANAGER_ADDRESS": "@pool_manager_address",
     "NEXT_PUBLIC_REEF_RPC_URL": "@reef_rpc_url",
-    "NEXT_PUBLIC_REEF_CHAIN_ID": "@reef_chain_id"
+    "NEXT_PUBLIC_REEF_CHAIN_ID": "@reef_chain_id",
+    "NODE_ENV": "production",
+    "NEXT_TELEMETRY_DISABLED": "1"
   },
   "headers": [
     {
@@ -32,15 +31,38 @@
         {
           "key": "X-XSS-Protection",
           "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
         }
       ]
     }
   ],
   "redirects": [
     {
-      "source": "/",
+      "source": "/home",
       "destination": "/",
-      "permanent": false
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
     }
   ]
 }
