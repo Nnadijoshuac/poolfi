@@ -12,8 +12,7 @@
     "deploy:preview": "vercel",
     "analyze": "ANALYZE=true next build",
     "type-check": "tsc --noEmit",
-    "vercel-build": "next build",
-    "postbuild": "next-sitemap"
+    "vercel-build": "next build"
   },
   "dependencies": {
     "next": "14.0.4",

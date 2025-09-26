@@ -96,7 +96,7 @@ const reefTestnet = {
 
 const config = getDefaultConfig({
   appName: 'PoolFi - Reef Savings Platform',
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'demo-project-id-for-conference',
+  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'e621e0027ef5a2a1afdcc6351101a95c',
   chains: [
     reefPelagia,
     reefMainnet,
