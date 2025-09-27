@@ -10,6 +10,7 @@ import CTA from '@/components/landing/CTA'
 import Footer from '@/components/landing/Footer'
 import ConnectWalletModal from '@/components/modals/ConnectWalletModal'
 import Dashboard from '@/components/Dashboard'
+import EnvDebug from '@/components/EnvDebug'
 
 export default function Home() {
   const [showWalletModal, setShowWalletModal] = useState(false)
@@ -58,6 +59,8 @@ export default function Home() {
         onClose={() => setShowWalletModal(false)}
         onWalletConnected={handleWalletConnected}
       />
+      
+      <EnvDebug />
     </main>
   )
 }
