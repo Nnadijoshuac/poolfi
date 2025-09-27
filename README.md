@@ -1,50 +1,22 @@
-# PoolFi - Reef Savings Platform
+# PoolFi - Decentralized Savings Platform
 
-A decentralized savings platform built on Reef blockchain that allows users to create, join, and manage savings pools with friends and family.
+A collaborative savings platform built on the Reef blockchain that allows users to create and join savings pools, contribute funds, and withdraw when goals are reached.
 
-## 🌊 Built for Reef Ecosystem
+## 🌟 Features
 
-This project is specifically designed for the Reef blockchain ecosystem, featuring:
-- **Reef Pelagia Network** support
-- **REEF token** integration
-- **Reef-specific** wallet connections
-- **Optimized** for Reef's EVM compatibility
+- **Pool Creation**: Create savings pools with custom targets and contribution amounts
+- **Collaborative Saving**: Join pools and contribute with others
+- **Smart Withdrawals**: Automatic fund distribution when goals are met
+- **Real-time Tracking**: Monitor pool progress and recent activities
+- **Wallet Integration**: Connect with various Web3 wallets
+- **Mobile Responsive**: Works seamlessly on all devices
 
-## 🚀 Features
+## 🚀 Live Demo
 
-### Core Functionality
-- **Create Savings Pools**: Set target amounts, deadlines, and member limits
-- **Join & Contribute**: Atomic join and contribute operations
-- **Pool Management**: Cancel pools after deadline if target not met
-- **Withdraw Funds**: Withdraw contributions after pool completion or cancellation
-- **Real-time Tracking**: Live blockchain event monitoring
+- **Frontend**: [poolfi.vercel.app](https://poolfi.vercel.app)
+- **Contract**: `0xD7ACd2a9FD159E69Bb102A1ca21C9a3e3A5F771B` (Reef Pelagia)
 
-### Security Features
-- **Atomic Operations**: Prevents front-running attacks
-- **Smart Contract Security**: Audited contract patterns
-- **Withdrawal Protection**: Safe fund recovery mechanisms
-
-### User Experience
-- **Modern UI**: Built with Next.js and Tailwind CSS
-- **Wallet Integration**: RainbowKit and WalletConnect support
-- **Responsive Design**: Works on all devices
-- **Real-time Updates**: Live activity tracking
-
-## 🏗️ Architecture
-
-### Frontend
-- **Framework**: Next.js 14
-- **Styling**: Tailwind CSS
-- **Wallet**: RainbowKit + WalletConnect
-- **Blockchain**: Wagmi + Viem
-- **State Management**: React hooks
-
-### Smart Contracts
-- **Language**: Solidity ^0.8.20
-- **Network**: Reef Pelagia (Chain ID: 13939)
-- **Features**: Gas-optimized, event-driven
-
-## 📁 Project Structure
+## 🏗️ Project Structure
 
 ```
 poolfi/
@@ -54,161 +26,151 @@ poolfi/
 │   ├── hooks/              # Custom React hooks
 │   ├── lib/                # Utility libraries
 │   └── public/             # Static assets
-├── smart-contracts/        # Solidity smart contracts
+├── smart-contracts/         # Solidity smart contracts
 │   ├── contracts/          # Contract source files
-│   ├── scripts/            # Deployment scripts
-│   └── test/               # Contract tests
+│   └── README.md           # Contract documentation
 └── README.md               # This file
 ```
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Next.js 14** - React framework with App Router
+- **TypeScript** - Type-safe JavaScript
+- **Tailwind CSS** - Utility-first CSS framework
+- **Wagmi** - React hooks for Ethereum
+- **RainbowKit** - Wallet connection UI
+- **Viem** - TypeScript interface for Ethereum
+
+### Smart Contracts
+- **Solidity** - Smart contract language
+- **Reef Pelagia** - Deployed on Reef testnet
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+
-- MetaMask wallet
-- REEF tokens (for testing)
+- Node.js 18+ 
+- Git
 
-### Frontend Setup
-```bash
-cd frontend
-npm install
-npm run dev
-```
+### Installation
 
-### Smart Contract Setup
-```bash
-cd smart-contracts
-npm install
-npx hardhat compile
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Nnadijoshuac/poolfi.git
+   cd poolfi
+   ```
 
-## 🌐 Network Configuration
+2. **Install frontend dependencies**
+   ```bash
+   cd frontend
+   npm install
+   ```
 
-### Reef Pelagia (Development)
-- **RPC URL**: `http://34.123.142.246:8545`
-- **Chain ID**: `13939`
-- **Currency**: REEF
-- **Explorer**: `https://dev.papi.how/explorer`
+3. **Set up environment variables**
+   ```bash
+   cp env.example .env.local
+   ```
+   
+   Update `.env.local` with your values:
+   ```env
+   NEXT_PUBLIC_POOL_MANAGER_ADDRESS=0xD7ACd2a9FD159E69Bb102A1ca21C9a3e3A5F771B
+   NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_walletconnect_id
+   NEXT_PUBLIC_REEF_RPC_URL=http://34.123.142.246:8545
+   NEXT_PUBLIC_REEF_CHAIN_ID=13939
+   ```
 
-### Adding to MetaMask
-1. Open MetaMask
-2. Add Custom Network
-3. Enter the network details above
-4. Save and switch to Reef Pelagia
+4. **Start development server**
+   ```bash
+   npm run dev
+   ```
 
-## 🔧 Environment Variables
+5. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
-Create `.env.local` in the frontend directory:
+## 🌐 Deployment
 
-```bash
-# Smart Contract Address (after deployment)
-NEXT_PUBLIC_POOL_MANAGER_ADDRESS=0x...
+### Vercel (Recommended)
 
-# WalletConnect Project ID
-NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
+1. **Connect to Vercel**
+   - Import your GitHub repository
+   - Set build command: `npm run build`
+   - Set output directory: `.next`
 
-# Reef Network Configuration
-NEXT_PUBLIC_REEF_RPC_URL=http://34.123.142.246:8545
-NEXT_PUBLIC_REEF_CHAIN_ID=13939
-```
+2. **Set Environment Variables**
+   - `NEXT_PUBLIC_POOL_MANAGER_ADDRESS`
+   - `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`
+   - `NEXT_PUBLIC_REEF_RPC_URL`
+   - `NEXT_PUBLIC_REEF_CHAIN_ID`
+
+3. **Deploy**
+   - Vercel will automatically deploy on every push to main
 
 ## 📱 Usage
 
-### Creating a Pool
-1. Connect your wallet
-2. Click "Create Pool"
-3. Set target amount, deadline, and max members
-4. Confirm transaction
+1. **Connect Wallet**
+   - Click "Connect Wallet" button
+   - Select your preferred wallet
+   - Connect to Reef Pelagia network
 
-### Joining a Pool
-1. Browse available pools
-2. Click "Join Pool"
-3. Enter contribution amount
-4. Confirm transaction
+2. **Create a Pool**
+   - Click "Create Pool" button
+   - Fill in pool details (name, target amount, contribution amount, max members)
+   - Confirm transaction
 
-### Managing Pools
-- View pool details
-- Track contributions
-- Withdraw funds when eligible
+3. **Join a Pool**
+   - Browse available pools
+   - Click "Join Pool" on desired pool
+   - Confirm contribution transaction
 
-## 🛠️ Development
+4. **Withdraw Funds**
+   - When pool reaches target, click "Withdraw"
+   - Funds will be sent to your wallet
 
-### Frontend Development
+## 🔧 Development
+
+### Available Scripts
+
 ```bash
-cd frontend
+# Development
 npm run dev          # Start development server
 npm run build        # Build for production
+npm run start        # Start production server
+
+# Linting
 npm run lint         # Run ESLint
+npm run type-check   # Run TypeScript checks
 ```
 
-### Smart Contract Development
-```bash
-cd smart-contracts
-npx hardhat compile  # Compile contracts
-npx hardhat test     # Run tests
-npx hardhat deploy   # Deploy contracts
-```
+### Project Structure
 
-## 🧪 Testing
-
-### Frontend Testing
-- Manual testing with MetaMask
-- Wallet connection testing
-- UI/UX validation
-
-### Smart Contract Testing
-- Unit tests for all functions
-- Event emission testing
-- Edge case validation
-
-## 🚀 Deployment
-
-### Frontend (Vercel)
-```bash
-cd frontend
-npm run build
-npm run deploy:vercel
-```
-
-### Smart Contract (Reef Pelagia)
-1. Deploy using Remix IDE
-2. Verify contract on explorer
-3. Update frontend environment variables
-
-## 🔒 Security Considerations
-
-- **Private Key Security**: Never commit private keys
-- **Contract Verification**: Verify all deployed contracts
-- **Access Control**: Proper permission management
-- **Input Validation**: Comprehensive input sanitization
+- **`/app`** - Next.js App Router pages
+- **`/components`** - Reusable React components
+- **`/hooks`** - Custom React hooks for blockchain interaction
+- **`/lib`** - Utility functions and configurations
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🏆 Hackathon Submission
+## 🙏 Acknowledgments
 
-This project was built for the Reef hackathon, showcasing:
-- **Reef Ecosystem Integration**
-- **Innovative Savings Platform**
-- **User-Friendly Interface**
-- **Secure Smart Contracts**
+- Built for the Reef Ecosystem Hackathon
+- Powered by Reef blockchain
+- UI components from Tailwind CSS
+- Wallet integration via RainbowKit
 
 ## 📞 Support
 
-For questions or support:
-- Create an issue in the repository
-- Contact the development team
-- Check the documentation
+For support, email support@poolfi.com or join our Discord community.
 
 ---
 
-**Built with ❤️ for the Reef Ecosystem**
+**PoolFi** - Save together, achieve more! 🚀
