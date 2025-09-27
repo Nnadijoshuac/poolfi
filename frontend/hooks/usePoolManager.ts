@@ -270,9 +270,23 @@ async function fetchPoolInfo(poolId: number): Promise<{
     ])
 
     return {
-      basic: basicInfo,
-      financial: financialInfo,
-      members: memberInfo
+      basic: {
+        id: basicInfo[0],
+        creator: basicInfo[1],
+        name: basicInfo[2],
+        deadline: basicInfo[3],
+        isActive: basicInfo[4],
+        isCompleted: basicInfo[5]
+      },
+      financial: {
+        targetAmount: financialInfo[0],
+        currentAmount: financialInfo[1],
+        contributionAmount: financialInfo[2]
+      },
+      members: {
+        maxMembers: memberInfo[0],
+        currentMembers: memberInfo[1]
+      }
     }
   } catch (error) {
     console.error(`Error fetching pool ${poolId} info:`, error)
