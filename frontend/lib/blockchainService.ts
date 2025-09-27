@@ -17,14 +17,15 @@ export interface EventFilter {
   topics?: string[]
 }
 
-// Event ABI definitions for filtering (BasicPool events)
+// Event ABI definitions for filtering (PoolFi events)
 export const POOL_EVENTS_ABI = [
   {
     "anonymous": false,
     "inputs": [
       {"indexed": true, "internalType": "uint256", "name": "poolId", "type": "uint256"},
       {"indexed": true, "internalType": "address", "name": "contributor", "type": "address"},
-      {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"}
+      {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
+      {"indexed": false, "internalType": "uint256", "name": "totalContributed", "type": "uint256"}
     ],
     "name": "ContributionMade",
     "type": "event"
@@ -47,18 +48,19 @@ export const POOL_EVENTS_ABI = [
     "anonymous": false,
     "inputs": [
       {"indexed": true, "internalType": "uint256", "name": "poolId", "type": "uint256"},
-      {"indexed": true, "internalType": "address", "name": "member", "type": "address"}
+      {"indexed": false, "internalType": "uint256", "name": "totalAmount", "type": "uint256"}
     ],
-    "name": "MemberJoined",
+    "name": "PoolCompleted",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [
       {"indexed": true, "internalType": "uint256", "name": "poolId", "type": "uint256"},
-      {"indexed": false, "internalType": "uint256", "name": "totalAmount", "type": "uint256"}
+      {"indexed": true, "internalType": "address", "name": "recipient", "type": "address"},
+      {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"}
     ],
-    "name": "PoolCompleted",
+    "name": "FundsWithdrawn",
     "type": "event"
   }
 ] as const
@@ -137,8 +139,8 @@ export class BlockchainService {
 
 // Utility function to create blockchain service instance
 export function createBlockchainService(): BlockchainService | null {
-  const rpcUrl = process.env.NEXT_PUBLIC_REEF_RPC_URL || 'https://rpc.reefscan.com'
-  const contractAddress = process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS || '0xd9145CCE52D386f254917e481eB44e9943F39138'
+  const rpcUrl = process.env.NEXT_PUBLIC_REEF_RPC_URL || 'http://34.123.142.246:8545'
+  const contractAddress = process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS || '0xD7ACd2a9FD159E69Bb102A1ca21C9a3e3A5F771B'
 
   if (!rpcUrl || !contractAddress || contractAddress === '0x0000000000000000000000000000000000000000') {
     return null
@@ -173,15 +175,16 @@ export function formatEventData(event: BlockchainEvent): {
         transactionHash: event.transactionHash
       }
 
-    case 'MemberJoined':
-      return {
-        type: 'join',
-        title: 'Pool Joined',
-        description: `You joined pool #${poolId}`,
-        poolId,
-        timestamp,
-        transactionHash: event.transactionHash
-      }
+        case 'FundsWithdrawn':
+          return {
+            type: 'withdrawal',
+            title: 'Funds Withdrawn',
+            description: `You withdrew from pool #${poolId}`,
+            amount: `${formatEther(event.args.amount)} REEF`,
+            poolId,
+            timestamp,
+            transactionHash: event.transactionHash
+          }
 
     case 'PoolCreated':
       return {

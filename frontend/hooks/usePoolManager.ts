@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { parseEther, formatEther } from 'viem'
 
-// Contract ABI - BasicPool ABI (matches your deployed contract)
-const BASIC_POOL_ABI = [
+// Contract ABI - PoolFi ABI (matches your deployed contract)
+const POOLFI_ABI = [
   {
     "inputs": [],
     "name": "poolCount",
@@ -14,20 +14,12 @@ const BASIC_POOL_ABI = [
   {
     "inputs": [
       {"internalType": "string", "name": "_name", "type": "string"},
-      {"internalType": "string", "name": "_description", "type": "string"},
       {"internalType": "uint256", "name": "_targetAmount", "type": "uint256"},
       {"internalType": "uint256", "name": "_contributionAmount", "type": "uint256"},
       {"internalType": "uint256", "name": "_maxMembers", "type": "uint256"},
       {"internalType": "uint256", "name": "_deadline", "type": "uint256"}
     ],
     "name": "createPool",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [{"internalType": "uint256", "name": "_poolId", "type": "uint256"}],
-    "name": "joinPool",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -41,21 +33,64 @@ const BASIC_POOL_ABI = [
   },
   {
     "inputs": [{"internalType": "uint256", "name": "_poolId", "type": "uint256"}],
-    "name": "getPoolInfo",
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "uint256", "name": "_poolId", "type": "uint256"}],
+    "name": "cancelPool",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "uint256", "name": "_poolId", "type": "uint256"}],
+    "name": "getPoolBasicInfo",
     "outputs": [
       {"internalType": "uint256", "name": "id", "type": "uint256"},
       {"internalType": "address", "name": "creator", "type": "address"},
       {"internalType": "string", "name": "name", "type": "string"},
-      {"internalType": "string", "name": "description", "type": "string"},
+      {"internalType": "uint256", "name": "deadline", "type": "uint256"},
+      {"internalType": "bool", "name": "isActive", "type": "bool"},
+      {"internalType": "bool", "name": "isCompleted", "type": "bool"}
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "uint256", "name": "_poolId", "type": "uint256"}],
+    "name": "getPoolFinancialInfo",
+    "outputs": [
       {"internalType": "uint256", "name": "targetAmount", "type": "uint256"},
       {"internalType": "uint256", "name": "currentAmount", "type": "uint256"},
-      {"internalType": "uint256", "name": "contributionAmount", "type": "uint256"},
-      {"internalType": "uint256", "name": "maxMembers", "type": "uint256"},
-      {"internalType": "uint256", "name": "currentMembers", "type": "uint256"},
-      {"internalType": "uint256", "name": "deadline", "type": "uint256"},
-      {"internalType": "bool", "name": "active", "type": "bool"},
-      {"internalType": "bool", "name": "completed", "type": "bool"}
+      {"internalType": "uint256", "name": "contributionAmount", "type": "uint256"}
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "uint256", "name": "_poolId", "type": "uint256"}],
+    "name": "getPoolMemberInfo",
+    "outputs": [
+      {"internalType": "uint256", "name": "maxMembers", "type": "uint256"},
+      {"internalType": "uint256", "name": "currentMembers", "type": "uint256"}
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
+    "name": "getUserPools",
+    "outputs": [{"internalType": "uint256[]", "name": "", "type": "uint256[]"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "uint256", "name": "_poolId", "type": "uint256"}, {"internalType": "address", "name": "_user", "type": "address"}],
+    "name": "hasUserContributed",
+    "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
     "stateMutability": "view",
     "type": "function"
   },
@@ -77,17 +112,9 @@ const BASIC_POOL_ABI = [
     "anonymous": false,
     "inputs": [
       {"indexed": true, "internalType": "uint256", "name": "poolId", "type": "uint256"},
-      {"indexed": true, "internalType": "address", "name": "member", "type": "address"}
-    ],
-    "name": "MemberJoined",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {"indexed": true, "internalType": "uint256", "name": "poolId", "type": "uint256"},
       {"indexed": true, "internalType": "address", "name": "contributor", "type": "address"},
-      {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"}
+      {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
+      {"indexed": false, "internalType": "uint256", "name": "totalContributed", "type": "uint256"}
     ],
     "name": "ContributionMade",
     "type": "event"
@@ -100,14 +127,24 @@ const BASIC_POOL_ABI = [
     ],
     "name": "PoolCompleted",
     "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {"indexed": true, "internalType": "uint256", "name": "poolId", "type": "uint256"},
+      {"indexed": true, "internalType": "address", "name": "recipient", "type": "address"},
+      {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"}
+    ],
+    "name": "FundsWithdrawn",
+    "type": "event"
   }
 ] as const
 
-// Contract addresses - Deployed contract address
-const BASIC_POOL_ADDRESS = process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS as `0x${string}` || '0xd9145CCE52D386f254917e481eB44e9943F39138'
+// Contract addresses - Deployed PoolFi contract address
+const POOLFI_ADDRESS = process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS as `0x${string}` || '0xD7ACd2a9FD159E69Bb102A1ca21C9a3e3A5F771B'
 
 // Check if contract is deployed
-const isContractDeployed = BASIC_POOL_ADDRESS && BASIC_POOL_ADDRESS !== '0x0000000000000000000000000000000000000000'
+const isContractDeployed = POOLFI_ADDRESS && POOLFI_ADDRESS !== '0x0000000000000000000000000000000000000000'
 
 export function usePoolManager() {
   const { address, isConnected } = useAccount()
@@ -116,8 +153,8 @@ export function usePoolManager() {
 
   // Get pool count
   const { data: poolCount } = useReadContract({
-    address: isContractDeployed ? BASIC_POOL_ADDRESS : undefined,
-    abi: BASIC_POOL_ABI,
+    address: isContractDeployed ? POOLFI_ADDRESS : undefined,
+    abi: POOLFI_ABI,
     functionName: 'poolCount'
   })
 
@@ -140,14 +177,16 @@ export function usePoolManager() {
           if (poolInfo) {
             poolData.push({
               id: i,
-              targetAmount: poolInfo.targetAmount,
-              deadline: poolInfo.deadline,
-              maxMembers: poolInfo.maxMembers,
-              currentMembers: poolInfo.currentMembers,
-              isActive: poolInfo.isActive,
-              isCompleted: poolInfo.isCompleted,
-              name: `Pool ${i}`, // SecurePool doesn't have names, so we'll generate them
-              description: `Target: ${formatEther(poolInfo.targetAmount)} REEF`
+              name: poolInfo.basic.name,
+              description: `Pool created by ${poolInfo.basic.creator}`,
+              targetAmount: poolInfo.financial.targetAmount,
+              currentAmount: poolInfo.financial.currentAmount,
+              contributionAmount: poolInfo.financial.contributionAmount,
+              maxMembers: poolInfo.members.maxMembers,
+              currentMembers: poolInfo.members.currentMembers,
+              deadline: poolInfo.basic.deadline,
+              active: poolInfo.basic.isActive,
+              completed: poolInfo.basic.isCompleted,
             })
           }
         }
@@ -173,16 +212,55 @@ export function usePoolManager() {
 
 // Helper function to fetch pool info
 async function fetchPoolInfo(poolId: number): Promise<{
-  targetAmount: bigint
-  deadline: bigint
-  maxMembers: bigint
-  currentMembers: bigint
-  isActive: boolean
-  isCompleted: boolean
+  basic: {
+    id: bigint
+    creator: string
+    name: string
+    deadline: bigint
+    isActive: boolean
+    isCompleted: boolean
+  }
+  financial: {
+    targetAmount: bigint
+    currentAmount: bigint
+    contributionAmount: bigint
+  }
+  members: {
+    maxMembers: bigint
+    currentMembers: bigint
+  }
 } | null> {
-  // This would need to be implemented with a contract call
-  // For now, return null to avoid errors
-  return null
+  try {
+    const [basicInfo, financialInfo, memberInfo] = await Promise.all([
+      readContract({
+        address: POOLFI_ADDRESS,
+        abi: POOLFI_ABI,
+        functionName: 'getPoolBasicInfo',
+        args: [BigInt(poolId)]
+      }),
+      readContract({
+        address: POOLFI_ADDRESS,
+        abi: POOLFI_ABI,
+        functionName: 'getPoolFinancialInfo',
+        args: [BigInt(poolId)]
+      }),
+      readContract({
+        address: POOLFI_ADDRESS,
+        abi: POOLFI_ABI,
+        functionName: 'getPoolMemberInfo',
+        args: [BigInt(poolId)]
+      })
+    ])
+    
+    return {
+      basic: basicInfo,
+      financial: financialInfo,
+      members: memberInfo
+    }
+  } catch (error) {
+    console.error(`Error fetching pool ${poolId} info:`, error)
+    return null
+  }
 }
 
 export function useCreatePool() {
@@ -203,12 +281,11 @@ export function useCreatePool() {
     if (!isContractDeployed) return
 
     writeContract({
-      address: BASIC_POOL_ADDRESS as `0x${string}`,
-      abi: BASIC_POOL_ABI,
+      address: POOLFI_ADDRESS as `0x${string}`,
+      abi: POOLFI_ABI,
       functionName: 'createPool',
       args: [
         poolData.name,
-        poolData.description,
         parseEther(poolData.targetAmount),
         parseEther(poolData.contributionAmount),
         BigInt(poolData.maxMembers),
@@ -225,27 +302,27 @@ export function useCreatePool() {
   }
 }
 
-export function useJoinAndContribute() {
+export function useContribute() {
   const { writeContract, data, isPending, error } = useWriteContract()
 
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
     hash: data,
   })
 
-  const joinAndContribute = (poolId: number, value: string) => {
+  const contribute = (poolId: number, value: string) => {
     if (!isContractDeployed) return
 
     writeContract({
-      address: SECURE_POOL_ADDRESS as `0x${string}`,
-      abi: SECURE_POOL_ABI,
-      functionName: 'joinAndContribute',
+      address: POOLFI_ADDRESS as `0x${string}`,
+      abi: POOLFI_ABI,
+      functionName: 'contribute',
       args: [BigInt(poolId)],
       value: parseEther(value)
     })
   }
 
   return {
-    joinAndContribute,
+    contribute,
     isLoading: isPending || isConfirming,
     isSuccess,
     error
@@ -263,8 +340,8 @@ export function useCancelPool() {
     if (!isContractDeployed) return
 
     writeContract({
-      address: SECURE_POOL_ADDRESS as `0x${string}`,
-      abi: SECURE_POOL_ABI,
+      address: POOLFI_ADDRESS as `0x${string}`,
+      abi: POOLFI_ABI,
       functionName: 'cancelPool',
       args: [BigInt(poolId)]
     })
@@ -289,8 +366,8 @@ export function useWithdraw() {
     if (!isContractDeployed) return
 
     writeContract({
-      address: SECURE_POOL_ADDRESS as `0x${string}`,
-      abi: SECURE_POOL_ABI,
+      address: POOLFI_ADDRESS as `0x${string}`,
+      abi: POOLFI_ABI,
       functionName: 'withdraw',
       args: [BigInt(poolId)]
     })
@@ -303,6 +380,7 @@ export function useWithdraw() {
     error
   }
 }
+
 
 // Hook to get user's REEF token balance from wallet
 export function useREEFBalance() {

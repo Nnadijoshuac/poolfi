@@ -137,7 +137,7 @@ contract PoolFiUltimate is ReentrancyGuard, Ownable, Pausable {
     
     // ============ CONSTRUCTOR ============
     
-    constructor() {
+    constructor() Ownable(msg.sender) {
         stats = PoolStats(0, 0, 0, 0, 0);
     }
     
@@ -326,9 +326,18 @@ contract PoolFiUltimate is ReentrancyGuard, Ownable, Pausable {
     // ============ VIEW FUNCTIONS ============
     
     /**
-     * @dev Get pool information
+     * @dev Get basic pool information
      * @param _poolId Pool ID
-     * @return Pool information
+     * @return id Pool ID
+     * @return creator Pool creator address
+     * @return name Pool name
+     * @return description Pool description
+     * @return targetAmount Target amount in wei
+     * @return currentAmount Current amount in wei
+     * @return contributionAmount Required contribution amount in wei
+     * @return maxMembers Maximum number of members
+     * @return currentMembers Current number of members
+     * @return deadline Pool deadline timestamp
      */
     function getPoolInfo(uint256 _poolId) 
         external 
@@ -344,12 +353,7 @@ contract PoolFiUltimate is ReentrancyGuard, Ownable, Pausable {
             uint256 contributionAmount,
             uint256 maxMembers,
             uint256 currentMembers,
-            uint256 deadline,
-            bool isActive,
-            bool isCompleted,
-            bool isCancelled,
-            uint256 createdAt,
-            uint256 completedAt
+            uint256 deadline
         ) 
     {
         Pool storage pool = pools[_poolId];
@@ -363,7 +367,33 @@ contract PoolFiUltimate is ReentrancyGuard, Ownable, Pausable {
             pool.contributionAmount,
             pool.maxMembers,
             pool.currentMembers,
-            pool.deadline,
+            pool.deadline
+        );
+    }
+    
+    /**
+     * @dev Get pool status information
+     * @param _poolId Pool ID
+     * @return isActive Whether pool is active
+     * @return isCompleted Whether pool is completed
+     * @return isCancelled Whether pool is cancelled
+     * @return createdAt Pool creation timestamp
+     * @return completedAt Pool completion timestamp
+     */
+    function getPoolStatus(uint256 _poolId) 
+        external 
+        view 
+        poolExists(_poolId)
+        returns (
+            bool isActive,
+            bool isCompleted,
+            bool isCancelled,
+            uint256 createdAt,
+            uint256 completedAt
+        ) 
+    {
+        Pool storage pool = pools[_poolId];
+        return (
             pool.isActive,
             pool.isCompleted,
             pool.isCancelled,
@@ -431,10 +461,26 @@ contract PoolFiUltimate is ReentrancyGuard, Ownable, Pausable {
     
     /**
      * @dev Get pool statistics
-     * @return Pool statistics
+     * @return totalPools Total number of pools
+     * @return activePools Number of active pools
+     * @return completedPools Number of completed pools
+     * @return totalVolume Total volume processed
+     * @return totalContributions Total contributions made
      */
-    function getPoolStats() external view returns (PoolStats memory) {
-        return stats;
+    function getPoolStats() external view returns (
+        uint256 totalPools,
+        uint256 activePools,
+        uint256 completedPools,
+        uint256 totalVolume,
+        uint256 totalContributions
+    ) {
+        return (
+            stats.totalPools,
+            stats.activePools,
+            stats.completedPools,
+            stats.totalVolume,
+            stats.totalContributions
+        );
     }
     
     /**
