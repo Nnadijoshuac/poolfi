@@ -1,16 +1,22 @@
 'use client'
 
 import { useAccount } from 'wagmi'
+import { useState, useEffect } from 'react'
 
 export default function EnvDebug() {
   const { address, isConnected } = useAccount()
+  const [mounted, setMounted] = useState(false)
 
-  if (process.env.NODE_ENV !== 'development') {
-    return null // Only show in development
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (process.env.NODE_ENV !== 'development' || !mounted) {
+    return null // Only show in development and after hydration
   }
 
   return (
-    <div className="fixed bottom-4 right-4 bg-black/80 text-white p-4 rounded-lg text-xs max-w-sm">
+    <div className="fixed bottom-4 right-4 bg-black/80 text-white p-4 rounded-lg text-xs max-w-sm z-50">
       <h3 className="font-bold mb-2">Environment Debug</h3>
       <div className="space-y-1">
         <div>Contract: {process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS ? '✅' : '❌'}</div>
