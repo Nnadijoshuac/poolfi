@@ -278,7 +278,13 @@ export function useCreatePool() {
     maxMembers: number
     deadline: number
   }) => {
-    if (!isContractDeployed) return
+    if (!isContractDeployed) {
+      console.error('Contract not deployed')
+      return
+    }
+
+    console.log('Creating pool with data:', poolData)
+    console.log('Contract address:', POOLFI_ADDRESS)
 
     writeContract({
       address: POOLFI_ADDRESS as `0x${string}`,

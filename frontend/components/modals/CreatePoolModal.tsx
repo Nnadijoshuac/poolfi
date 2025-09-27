@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useCreatePool } from '@/hooks/usePoolManager'
 import toast from 'react-hot-toast'
 import PoolDetailsModal from './PoolDetailsModal'
@@ -29,6 +29,26 @@ export default function CreatePoolModal({ isOpen, onClose }: CreatePoolModalProp
   })
 
   const { createPool, isLoading, isSuccess, error } = useCreatePool()
+
+  // Handle successful pool creation
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('Pool created successfully!')
+      setShowDetailsModal(false)
+      // Show invite modal after a short delay
+      setTimeout(() => {
+        setShowInviteModal(true)
+      }, 500)
+    }
+  }, [isSuccess])
+
+  // Handle errors
+  useEffect(() => {
+    if (error) {
+      toast.error(`Failed to create pool: ${error.message}`)
+      console.error('Pool creation error:', error)
+    }
+  }, [error])
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault()
@@ -61,28 +81,15 @@ export default function CreatePoolModal({ isOpen, onClose }: CreatePoolModalProp
     // Calculate deadline (30 days from now)
     const deadline = Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60)
 
-    try {
-      await createPool({
-        name: poolDetails.poolName,
-        description: poolDetails.description || `Pool created by ${poolDetails.poolName}`,
-        targetAmount: formData.totalPool,
-        contributionAmount: formData.contributionAmount,
-        maxMembers: formData.memberCount,
-        deadline: deadline
-      })
-
-      if (isSuccess) {
-        toast.success('Pool created successfully!')
-        setShowDetailsModal(false)
-        // Show invite modal after a short delay
-        setTimeout(() => {
-          setShowInviteModal(true)
-        }, 500)
-      }
-    } catch (err) {
-      toast.error('Failed to create pool')
-      console.error(err)
-    }
+    console.log('Attempting to create pool...')
+    createPool({
+      name: poolDetails.poolName,
+      description: poolDetails.description || `Pool created by ${poolDetails.poolName}`,
+      targetAmount: formData.totalPool,
+      contributionAmount: formData.contributionAmount,
+      maxMembers: formData.memberCount,
+      deadline: deadline
+    })
   }
 
   const handleClose = () => {
