@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
-import { parseEther, formatEther } from 'viem'
+import { parseEther, formatEther, readContract, createPublicClient, http } from 'viem'
+import { reefTestnet } from 'wagmi/chains'
 
 // Contract ABI - PoolFi ABI (matches your deployed contract)
 const POOLFI_ABI = [
@@ -231,27 +232,33 @@ async function fetchPoolInfo(poolId: number): Promise<{
   }
 } | null> {
   try {
+    // Create a public client for reading contract data
+    const publicClient = createPublicClient({
+      chain: reefTestnet,
+      transport: http(process.env.NEXT_PUBLIC_REEF_RPC_URL || 'http://34.123.142.246:8545'),
+    })
+
     const [basicInfo, financialInfo, memberInfo] = await Promise.all([
-      readContract({
+      readContract(publicClient, {
         address: POOLFI_ADDRESS,
         abi: POOLFI_ABI,
         functionName: 'getPoolBasicInfo',
         args: [BigInt(poolId)]
       }),
-      readContract({
+      readContract(publicClient, {
         address: POOLFI_ADDRESS,
         abi: POOLFI_ABI,
         functionName: 'getPoolFinancialInfo',
         args: [BigInt(poolId)]
       }),
-      readContract({
+      readContract(publicClient, {
         address: POOLFI_ADDRESS,
         abi: POOLFI_ABI,
         functionName: 'getPoolMemberInfo',
         args: [BigInt(poolId)]
       })
     ])
-    
+
     return {
       basic: basicInfo,
       financial: financialInfo,
