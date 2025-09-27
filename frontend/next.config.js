@@ -49,6 +49,12 @@ const nextConfig = {
       ...config.resolve.alias,
       '@react-native-async-storage/async-storage': false,
     }
+
+    // Handle pino-pretty warning
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'pino-pretty': false,
+    }
     
     // Production optimizations
     if (!dev && !isServer) {
