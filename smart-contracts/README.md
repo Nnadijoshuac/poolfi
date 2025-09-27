@@ -5,7 +5,7 @@ This directory contains the smart contracts for the PoolFi decentralized savings
 ## Contract
 
 - **PoolFi.sol** - Main smart contract deployed on Reef Pelagia network
-  - Address: `0xD7ACd2a9FD159E69Bb102A1ca21C9a3e3A5F771B`
+  - Address: `0x7EF2e0048f5bAeDe046f6BF797943daF4ED8CB47`
   - Network: Reef Pelagia (Chain ID: 13939)
   - Features: Pool creation, contributions, withdrawals, and management
 

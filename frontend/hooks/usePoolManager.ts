@@ -141,7 +141,7 @@ const POOLFI_ABI = [
 ] as const
 
 // Contract addresses - Deployed PoolFi contract address
-const POOLFI_ADDRESS = process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS as `0x${string}` || '0xD7ACd2a9FD159E69Bb102A1ca21C9a3e3A5F771B'
+const POOLFI_ADDRESS = process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS as `0x${string}` || '0x7EF2e0048f5bAeDe046f6BF797943daF4ED8CB47'
 
 // Check if contract is deployed
 const isContractDeployed = POOLFI_ADDRESS && POOLFI_ADDRESS !== '0x0000000000000000000000000000000000000000'

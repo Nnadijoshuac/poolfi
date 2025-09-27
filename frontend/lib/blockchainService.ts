@@ -140,7 +140,7 @@ export class BlockchainService {
 // Utility function to create blockchain service instance
 export function createBlockchainService(): BlockchainService | null {
   const rpcUrl = process.env.NEXT_PUBLIC_REEF_RPC_URL || 'http://34.123.142.246:8545'
-  const contractAddress = process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS || '0xD7ACd2a9FD159E69Bb102A1ca21C9a3e3A5F771B'
+  const contractAddress = process.env.NEXT_PUBLIC_POOL_MANAGER_ADDRESS || '0x7EF2e0048f5bAeDe046f6BF797943daF4ED8CB47'
 
   if (!rpcUrl || !contractAddress || contractAddress === '0x0000000000000000000000000000000000000000') {
     return null

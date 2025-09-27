@@ -14,7 +14,7 @@ A collaborative savings platform built on the Reef blockchain that allows users 
 ## 🚀 Live Demo
 
 - **Frontend**: [poolfi.vercel.app](https://poolfi.vercel.app)
-- **Contract**: `0xD7ACd2a9FD159E69Bb102A1ca21C9a3e3A5F771B` (Reef Pelagia)
+- **Contract**: `0x7EF2e0048f5bAeDe046f6BF797943daF4ED8CB47` (Reef Pelagia)
 
 ## 🏗️ Project Structure
 
@@ -73,7 +73,7 @@ poolfi/
    
    Update `.env.local` with your values:
    ```env
-   NEXT_PUBLIC_POOL_MANAGER_ADDRESS=0xD7ACd2a9FD159E69Bb102A1ca21C9a3e3A5F771B
+   NEXT_PUBLIC_POOL_MANAGER_ADDRESS=0x7EF2e0048f5bAeDe046f6BF797943daF4ED8CB47
    NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_walletconnect_id
    NEXT_PUBLIC_REEF_RPC_URL=http://34.123.142.246:8545
    NEXT_PUBLIC_REEF_CHAIN_ID=13939
