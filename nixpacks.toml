@@ -1,0 +1,23 @@
+providers = ["node"]
+
+# Build the app from the frontend subdirectory
+[phases]
+
+[phases.install]
+workingDirectory = "frontend"
+cmds = [
+  "npm ci"
+]
+
+[phases.build]
+workingDirectory = "frontend"
+cmds = [
+  "npm run build"
+]
+
+# Start command from the project root, but execute in frontend
+[start]
+workingDirectory = "frontend"
+cmd = "npm run start -- -p ${PORT:-3000}"
+
+
