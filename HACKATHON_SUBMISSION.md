@@ -46,7 +46,7 @@ poolfi/
 │   ├── components/            # React components
 │   ├── hooks/                 # Custom React hooks
 │   ├── lib/                   # Utility libraries
-│   └── public/                # Static assets
+│   └── public/                # Static assets (images, icons, etc.)
 └── README.md                  # Project documentation
 ```
 

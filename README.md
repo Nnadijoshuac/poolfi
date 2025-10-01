@@ -23,13 +23,13 @@ poolfi/
 ├── frontend/                 # Next.js frontend application
 │   ├── app/                 # App router pages
 │   ├── components/          # React components
-│   ├── hooks/              # Custom React hooks
-│   ├── lib/                # Utility libraries
-│   └── public/             # Static assets
+│   ├── hooks/               # Custom React hooks
+│   ├── lib/                 # Utility libraries
+│   └── public/              # Static assets (images, icons, etc.)
 ├── smart-contracts/         # Solidity smart contracts
-│   ├── contracts/          # Contract source files
-│   └── README.md           # Contract documentation
-└── README.md               # This file
+│   ├── contracts/           # Contract source files
+│   └── README.md            # Contract documentation
+└── README.md                # This file
 ```
 
 ## 🛠️ Tech Stack
