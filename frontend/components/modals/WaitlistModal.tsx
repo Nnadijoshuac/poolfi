@@ -85,12 +85,12 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
   return (
     <div 
-      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
       style={{ zIndex: 9999 }}
       onClick={handleOverlayClick}
     >
       <div 
-        className="rounded-lg p-8 w-full max-w-lg mx-4"
+        className="rounded-lg p-4 sm:p-6 md:p-8 w-full max-w-sm sm:max-w-md md:max-w-lg mx-2 sm:mx-4 max-h-[90vh] overflow-y-auto"
         style={{ 
           backgroundColor: '#F7F9FC',
           border: '1px solid #AEC2ED'
@@ -99,14 +99,14 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
         {!isSubmitted ? (
           <>
             {/* Header */}
-            <div className="text-left mb-8">
+            <div className="text-left mb-6 sm:mb-8">
               <h2 
                 className="text-black mb-2"
                 style={{
                   fontFamily: 'Inter',
                   fontWeight: 600,
-                  fontSize: '48px',
-                  lineHeight: '80px',
+                  fontSize: 'clamp(28px, 8vw, 48px)',
+                  lineHeight: 'clamp(36px, 10vw, 80px)',
                   letterSpacing: '-4%'
                 }}
               >
@@ -117,8 +117,8 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                 style={{
                   fontFamily: 'Inter',
                   fontWeight: 600,
-                  fontSize: '19px',
-                  lineHeight: '23px',
+                  fontSize: 'clamp(16px, 4vw, 19px)',
+                  lineHeight: 'clamp(20px, 5vw, 23px)',
                   letterSpacing: '-2%'
                 }}
               >
@@ -127,7 +127,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               {/* Name Field */}
               <div>
                 <label htmlFor="name" className="block text-sm text-gray-500 mb-2">
@@ -140,13 +140,13 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   value={formData.name}
                   onChange={handleInputChange}
                   placeholder="Enter Your Name"
-                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                   style={{
                     backgroundColor: '#ffffff',
                     border: '1px solid #AEC2ED',
                     fontFamily: 'Space Grotesk',
                     fontWeight: 400,
-                    fontSize: '23.25px',
+                    fontSize: 'clamp(16px, 4vw, 23.25px)',
                     lineHeight: '100%',
                     letterSpacing: '0px',
                     textAlign: 'left'
@@ -167,13 +167,13 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="e.g janedoerr@mail.com"
-                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                   style={{
                     backgroundColor: '#ffffff',
                     border: '1px solid #AEC2ED',
                     fontFamily: 'Space Grotesk',
                     fontWeight: 400,
-                    fontSize: '23.25px',
+                    fontSize: 'clamp(16px, 4vw, 23.25px)',
                     lineHeight: '100%',
                     letterSpacing: '0px',
                     textAlign: 'left'
@@ -193,13 +193,13 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     name="country"
                     value={formData.country}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black appearance-none"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black appearance-none"
                     style={{
                       backgroundColor: '#ffffff',
                       border: '1px solid #AEC2ED',
                       fontFamily: 'Space Grotesk',
                       fontWeight: 400,
-                      fontSize: '23.25px',
+                      fontSize: 'clamp(16px, 4vw, 23.25px)',
                       lineHeight: '100%',
                       letterSpacing: '0px',
                       textAlign: 'left'
@@ -249,8 +249,8 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     <option value="Other">Other</option>
                   </select>
                   {/* Dropdown arrow */}
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:pr-3 pointer-events-none">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
@@ -261,7 +261,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-blue-600 text-white font-bold py-2.5 sm:py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               >
                 {isSubmitting ? 'Submitting...' : 'Submit'}
               </button>
@@ -269,14 +269,14 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
           </>
         ) : (
           /* Success Message */
-          <div className="text-center py-8">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center py-6 sm:py-8">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-black mb-2">Thank you!</h3>
-            <p className="text-gray-600">You&apos;ve been added to our waitlist. We&apos;ll notify you when we launch!</p>
+            <h3 className="text-lg sm:text-xl font-bold text-black mb-2">Thank you!</h3>
+            <p className="text-gray-600 text-sm sm:text-base px-2">You&apos;ve been added to our waitlist. We&apos;ll notify you when we launch!</p>
           </div>
         )}
       </div>
