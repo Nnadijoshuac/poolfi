@@ -9,11 +9,13 @@ import WhyPoolFi from '@/components/landing/WhyPoolFi'
 import CTA from '@/components/landing/CTA'
 import Footer from '@/components/landing/Footer'
 import ConnectWalletModal from '@/components/modals/ConnectWalletModal'
+import WaitlistModal from '@/components/modals/WaitlistModal'
 import Dashboard from '@/components/Dashboard'
 import EnvDebug from '@/components/EnvDebug'
 
 export default function Home() {
   const [showWalletModal, setShowWalletModal] = useState(false)
+  const [showWaitlistModal, setShowWaitlistModal] = useState(false)
   const [isWalletConnected, setIsWalletConnected] = useState(false)
   const [showApp, setShowApp] = useState(false)
   const { isConnected } = useAccount()
@@ -27,11 +29,7 @@ export default function Home() {
   }, [isConnected])
 
   const handleGetStarted = () => {
-    if (isWalletConnected) {
-      setShowApp(true)
-    } else {
-      setShowWalletModal(true)
-    }
+    setShowWaitlistModal(true)
   }
 
   const handleWalletConnected = () => {
@@ -58,6 +56,11 @@ export default function Home() {
         isOpen={showWalletModal}
         onClose={() => setShowWalletModal(false)}
         onWalletConnected={handleWalletConnected}
+      />
+      
+      <WaitlistModal
+        isOpen={showWaitlistModal}
+        onClose={() => setShowWaitlistModal(false)}
       />
       
       <EnvDebug />
