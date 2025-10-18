@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface WaitlistModalProps {
   isOpen: boolean
@@ -15,6 +15,36 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isDetectingCountry, setIsDetectingCountry] = useState(false)
+
+  // Auto-detect country when modal opens
+  useEffect(() => {
+    if (isOpen && !formData.country) {
+      detectCountry()
+    }
+  }, [isOpen, formData.country])
+
+  const detectCountry = async () => {
+    setIsDetectingCountry(true)
+    try {
+      // Try to get country from IP geolocation
+      const response = await fetch('https://ipapi.co/json/')
+      const data = await response.json()
+      
+      if (data.country_code) {
+        // Map country codes to our option values
+        const countryCode = data.country_code.toUpperCase()
+        setFormData(prev => ({
+          ...prev,
+          country: countryCode
+        }))
+      }
+    } catch (error) {
+      console.log('Country detection failed, user can select manually')
+    } finally {
+      setIsDetectingCountry(false)
+    }
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -36,16 +66,21 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     
     // Close modal after 2 seconds
     setTimeout(() => {
-      setIsSubmitted(false)
-      setFormData({ name: '', email: '', country: '' })
-      onClose()
+      handleClose()
     }, 2000)
   }
 
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      onClose()
+      handleClose()
     }
+  }
+
+  const handleClose = () => {
+    // Reset form when closing
+    setFormData({ name: '', email: '', country: '' })
+    setIsSubmitted(false)
+    onClose()
   }
 
   return (
@@ -170,8 +205,11 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       textAlign: 'left'
                     }}
                     required
+                    disabled={isDetectingCountry}
                   >
-                
+                    <option value="">
+                      {isDetectingCountry ? 'Detecting your location...' : 'Select your country'}
+                    </option>
                     <option value="DZ">Algeria</option>
                     <option value="AU">Australia</option>
                     <option value="BW">Botswana</option>

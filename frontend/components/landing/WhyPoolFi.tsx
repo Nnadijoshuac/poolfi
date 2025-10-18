@@ -44,7 +44,7 @@ export default function WhyPoolFi({ onGetStarted }: WhyPoolFiProps) {
                   Secure & Transparent
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600">
-                  Reef Chain ensures no tampering or
+                  BlockChain ensures no tampering or
                   <br className="hidden sm:block" />
                   <span className="sm:hidden"> </span>hidden fees
                 </p>

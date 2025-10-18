@@ -57,7 +57,7 @@ export default function Hero({ onGetStarted }: HeroProps) {
           </div>
         </div>
         <p className="text-sm sm:text-base md:text-lg mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed px-4" style={{ color: '#000000' }}>
-          Join trusted digital savings pools (Ajo/Esusu) with friends, family and communities.
+          Join Trusted Digital Collective savings Pools (Ajo/Esusu) with friends, family and communities.
           <br className="hidden sm:block" />
           <span className="sm:hidden"> </span>Built on Reef Chain for fast, transparent and secure transactions.
         </p>

@@ -14,7 +14,7 @@ export default function CTA({ onGetStarted }: CTAProps) {
           Smarter?
         </h2>
         <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-3xl mx-auto text-gray-600 px-4">
-          Take the loop into stores-free savings with friends and family
+        Take the leap into stress free savings with friends and family
         </p>
         <div className="flex justify-center">
           <button 

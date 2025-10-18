@@ -43,10 +43,7 @@ export default function Footer() {
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="text-center sm:text-left">
               <p className="text-white/80 text-xs sm:text-sm">
-                web3 conf enugu&apos;25 Hackathon
-              </p>
-              <p className="text-white/60 text-xs mt-1">
-                by serenity and awmah
+                © 2025 PoolFi. All rights reserved.
               </p>
             </div>
             <div className="flex flex-wrap justify-center sm:justify-end space-x-3 sm:space-x-4">
