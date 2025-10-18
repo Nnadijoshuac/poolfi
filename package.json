@@ -4,10 +4,11 @@
   "description": "PoolFi - Collaborative Savings Platform",
   "private": true,
   "scripts": {
-    "build": "cd frontend && npm run build",
+    "build": "cd frontend && npm ci && npm run build",
     "start": "cd frontend && npm start",
     "dev": "cd frontend && npm run dev",
-    "install:frontend": "cd frontend && npm install"
+    "install": "cd frontend && npm ci",
+    "postinstall": "cd frontend && npm ci"
   },
   "engines": {
     "node": ">=18.0.0",
