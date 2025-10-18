@@ -5,14 +5,16 @@
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p $PORT",
     "lint": "next lint",
     "build:vercel": "next build",
     "deploy:vercel": "vercel --prod",
     "deploy:preview": "vercel",
     "analyze": "ANALYZE=true next build",
     "type-check": "tsc --noEmit",
-    "vercel-build": "next build"
+    "vercel-build": "next build",
+    "railway:build": "next build",
+    "railway:start": "next start"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.0.0",

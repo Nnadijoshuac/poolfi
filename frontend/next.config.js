@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // App Router is now stable in Next.js 14, no experimental flag needed
-  // output: 'standalone', // Commented out for development - causes chunk loading issues
+  output: 'standalone', // Enable for production deployment
   poweredByHeader: false,
   compress: true,
   generateEtags: true,
