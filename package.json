@@ -1,0 +1,16 @@
+{
+  "name": "poolfi",
+  "version": "1.0.0",
+  "description": "PoolFi - Collaborative Savings Platform",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm start",
+    "dev": "cd frontend && npm run dev",
+    "install:frontend": "cd frontend && npm install"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
