@@ -217,7 +217,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     <option value="CM">Cameroon</option>
                     <option value="CA">Canada</option>
                     <option value="CN">China</option>
-                    <option value="CI">Côte d'Ivoire</option>
+                    <option value="CI">Côte d&apos;Ivoire</option>
                     <option value="EG">Egypt</option>
                     <option value="ET">Ethiopia</option>
                     <option value="FR">France</option>
@@ -276,7 +276,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
               </svg>
             </div>
             <h3 className="text-xl font-bold text-black mb-2">Thank you!</h3>
-            <p className="text-gray-600">You've been added to our waitlist. We'll notify you when we launch!</p>
+            <p className="text-gray-600">You&apos;ve been added to our waitlist. We&apos;ll notify you when we launch!</p>
           </div>
         )}
       </div>
