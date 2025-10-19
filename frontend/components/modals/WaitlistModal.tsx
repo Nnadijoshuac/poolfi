@@ -58,16 +58,40 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     e.preventDefault()
     setIsSubmitting(true)
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-    
-    // Close modal after 2 seconds
-    setTimeout(() => {
-      handleClose()
-    }, 2000)
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          country: formData.country,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to join waitlist')
+      }
+
+      setIsSubmitting(false)
+      setIsSubmitted(true)
+      
+      // Close modal after 2 seconds
+      setTimeout(() => {
+        handleClose()
+      }, 2000)
+
+    } catch (error) {
+      console.error('Waitlist signup error:', error)
+      setIsSubmitting(false)
+      
+      // You could add error state handling here
+      alert(error instanceof Error ? error.message : 'Failed to join waitlist. Please try again.')
+    }
   }
 
   const handleOverlayClick = (e: React.MouseEvent) => {
