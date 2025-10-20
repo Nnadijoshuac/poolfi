@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { waitlistService } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,9 +30,7 @@ export async function POST(request: NextRequest) {
     const userAgent = request.headers.get('user-agent') || 'unknown'
     
     // Check if email already exists
-    const existingUser = await prisma.waitlist.findUnique({
-      where: { email: email.toLowerCase().trim() }
-    })
+    const existingUser = await waitlistService.getUserByEmail(email)
     
     if (existingUser) {
       return NextResponse.json(
@@ -42,14 +40,12 @@ export async function POST(request: NextRequest) {
     }
     
     // Create new waitlist entry
-    const newUser = await prisma.waitlist.create({
-      data: {
-        name: name.trim(),
-        email: email.toLowerCase().trim(),
-        country: country || null,
-        ipAddress,
-        userAgent,
-      }
+    const newUser = await waitlistService.addUser({
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
+      country: country || undefined,
+      ipAddress,
+      userAgent,
     })
     
     console.log('New waitlist signup:', {
