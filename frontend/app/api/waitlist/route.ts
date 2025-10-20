@@ -79,20 +79,9 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    // Get waitlist stats
-    const totalCount = await prisma.waitlist.count()
-    const recentUsers = await prisma.waitlist.findMany({
-      select: {
-        id: true,
-        name: true,
-        country: true,
-        createdAt: true,
-      },
-      orderBy: {
-        createdAt: 'desc'
-      },
-      take: 10
-    })
+    // Get waitlist stats (via Supabase)
+    const totalCount = await waitlistService.getUserCount()
+    const recentUsers = await waitlistService.getRecentUsers(10)
     
     return NextResponse.json({
       total: totalCount,
