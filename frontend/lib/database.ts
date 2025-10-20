@@ -3,7 +3,7 @@
 
 export const databaseConfig = {
   provider: 'postgresql' as const,
-  url: process.env.DATABASE_URL || 'postgresql://localhost:5432/poolfi',
+  url: process.env.DATABASE_URL || 'postgres://user_69a97e85:3c7b1e9755495d739f6d5dc7bf81926d@db.pxxl.pro:49077/db_965c6ba5',
 }
 
 // Waitlist user interface (matches Prisma schema)
