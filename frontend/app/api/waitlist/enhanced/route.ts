@@ -44,8 +44,8 @@ export async function POST(request: NextRequest) {
       name: name.trim(),
       email: email.toLowerCase().trim(),
       country,
-      ip_address: ip,
-      user_agent: userAgent,
+      ipAddress: ip,
+      userAgent: userAgent,
     })
 
     // Send welcome email (async, don't wait for it)
@@ -97,7 +97,7 @@ export async function GET() {
         name: user.name,
         email: user.email,
         country: user.country,
-        created_at: user.created_at
+        createdAt: user.createdAt
       }))
     })
   } catch (error) {
