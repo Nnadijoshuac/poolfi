@@ -1,13 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-// Simple in-memory storage (for demo - use database in production)
-let waitlistData: Array<{
-  id: string
-  name: string
-  email: string
-  country: string
-  timestamp: string
-}> = []
+import { prisma } from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,9 +7,9 @@ export async function POST(request: NextRequest) {
     const { name, email, country } = body
 
     // Basic validation
-    if (!name || !email || !country) {
+    if (!name || !email) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Name and email are required' },
         { status: 400 }
       )
     }
@@ -31,45 +23,57 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Get IP address and user agent
+    const ipAddress = request.headers.get('x-forwarded-for') || 
+                      request.headers.get('x-real-ip') || 
+                      'unknown'
+    const userAgent = request.headers.get('user-agent') || 'unknown'
+    
     // Check if email already exists
-    const existingUser = waitlistData.find(user => user.email === email)
+    const existingUser = await prisma.waitlist.findUnique({
+      where: { email: email.toLowerCase().trim() }
+    })
+    
     if (existingUser) {
       return NextResponse.json(
-        { error: 'Email already registered' },
+        { error: 'Email already exists in waitlist' },
         { status: 409 }
       )
     }
-
-    // Add to waitlist
-    const newUser = {
-      id: Date.now().toString(),
-      name: name.trim(),
-      email: email.toLowerCase().trim(),
-      country,
-      timestamp: new Date().toISOString()
-    }
-
-    waitlistData.push(newUser)
-
-    // Log the signup (you can replace this with database storage)
-    console.log('New waitlist signup:', newUser)
-
-    return NextResponse.json(
-      { 
-        success: true, 
-        message: 'Successfully added to waitlist',
-        user: {
-          id: newUser.id,
-          name: newUser.name,
-          email: newUser.email,
-          country: newUser.country
-        }
-      },
-      { status: 201 }
-    )
-
+    
+    // Create new waitlist entry
+    const newUser = await prisma.waitlist.create({
+      data: {
+        name: name.trim(),
+        email: email.toLowerCase().trim(),
+        country: country || null,
+        ipAddress,
+        userAgent,
+      }
+    })
+    
+    console.log('New waitlist signup:', {
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+      country: newUser.country
+    })
+    
+    return NextResponse.json({ 
+      success: true,
+      message: 'Successfully added to waitlist',
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        country: newUser.country,
+        createdAt: newUser.createdAt
+      }
+    }, { status: 201 })
+    
   } catch (error) {
-    console.error('Waitlist signup error:', error)
+    console.error('Waitlist creation error:', error)
+    
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -78,15 +82,38 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  // Return waitlist stats (optional)
-  return NextResponse.json({
-    total: waitlistData.length,
-    users: waitlistData.map(user => ({
-      id: user.id,
-      name: user.name,
-      country: user.country,
-      timestamp: user.timestamp
-    }))
-  })
+  try {
+    // Get waitlist stats
+    const totalCount = await prisma.waitlist.count()
+    const recentUsers = await prisma.waitlist.findMany({
+      select: {
+        id: true,
+        name: true,
+        country: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: 10
+    })
+    
+    return NextResponse.json({
+      total: totalCount,
+      users: recentUsers.map(user => ({
+        id: user.id,
+        name: user.name,
+        country: user.country,
+        timestamp: user.createdAt
+      }))
+    })
+    
+  } catch (error) {
+    console.error('Waitlist fetch error:', error)
+    return NextResponse.json(
+      { error: 'Failed to fetch waitlist data' },
+      { status: 500 }
+    )
+  }
 }
 

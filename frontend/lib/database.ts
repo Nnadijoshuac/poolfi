@@ -1,40 +1,33 @@
-// Database configuration for different providers
-// Choose one based on your preference
+// Database configuration
+// Using Prisma with PostgreSQL
 
-// Option A: Supabase (Recommended)
-export const supabaseConfig = {
-  url: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+export const databaseConfig = {
+  provider: 'postgresql' as const,
+  url: process.env.DATABASE_URL || 'postgresql://localhost:5432/poolfi',
 }
 
-// Option B: PlanetScale (MySQL)
-export const planetscaleConfig = {
-  host: process.env.DATABASE_HOST!,
-  username: process.env.DATABASE_USERNAME!,
-  password: process.env.DATABASE_PASSWORD!,
-  database: process.env.DATABASE_NAME!,
-}
-
-// Option C: MongoDB
-export const mongoConfig = {
-  uri: process.env.MONGODB_URI!,
-  database: process.env.MONGODB_DATABASE || 'poolfi',
-}
-
-// Waitlist user interface
+// Waitlist user interface (matches Prisma schema)
 export interface WaitlistUser {
   id: string
   name: string
   email: string
-  country: string
-  timestamp: string
-  ip_address?: string
-  user_agent?: string
+  country?: string | null
+  ipAddress?: string | null
+  userAgent?: string | null
+  createdAt: Date
+  updatedAt: Date
+}
+
+// Input type for creating waitlist users
+export interface CreateWaitlistUser {
+  name: string
+  email: string
+  country?: string
 }
 
 // Database operations interface
 export interface DatabaseOperations {
-  addUser(user: Omit<WaitlistUser, 'id' | 'timestamp'>): Promise<WaitlistUser>
+  addUser(user: CreateWaitlistUser): Promise<WaitlistUser>
   getUserByEmail(email: string): Promise<WaitlistUser | null>
   getAllUsers(): Promise<WaitlistUser[]>
   getUserCount(): Promise<number>

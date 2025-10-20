@@ -1,78 +1,59 @@
-import { createClient } from '@supabase/supabase-js'
-import { supabaseConfig } from './database'
+import { prisma } from './prisma'
+import type { CreateWaitlistUser, WaitlistUser } from './database'
 
-// Initialize Supabase client
-export const supabase = createClient(
-  supabaseConfig.url,
-  supabaseConfig.anonKey
-)
-
-// Waitlist table operations
+// Waitlist service using Prisma
 export const waitlistService = {
-  async addUser(userData: {
-    name: string
-    email: string
-    country: string
-    ip_address?: string
-    user_agent?: string
-  }) {
-    const { data, error } = await supabase
-      .from('waitlist')
-      .insert([{
-        name: userData.name,
-        email: userData.email,
-        country: userData.country,
-        ip_address: userData.ip_address,
-        user_agent: userData.user_agent,
-        created_at: new Date().toISOString()
-      }])
-      .select()
-      .single()
+  async addUser(userData: CreateWaitlistUser & {
+    ipAddress?: string
+    userAgent?: string
+  }): Promise<WaitlistUser> {
+    const user = await prisma.waitlist.create({
+      data: {
+        name: userData.name.trim(),
+        email: userData.email.toLowerCase().trim(),
+        country: userData.country || null,
+        ipAddress: userData.ipAddress || null,
+        userAgent: userData.userAgent || null,
+      }
+    })
 
-    if (error) {
-      throw new Error(error.message)
-    }
-
-    return data
+    return user
   },
 
-  async getUserByEmail(email: string) {
-    const { data, error } = await supabase
-      .from('waitlist')
-      .select('*')
-      .eq('email', email)
-      .single()
+  async getUserByEmail(email: string): Promise<WaitlistUser | null> {
+    const user = await prisma.waitlist.findUnique({
+      where: { 
+        email: email.toLowerCase().trim() 
+      }
+    })
 
-    if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
-      throw new Error(error.message)
-    }
-
-    return data
+    return user
   },
 
-  async getAllUsers() {
-    const { data, error } = await supabase
-      .from('waitlist')
-      .select('*')
-      .order('created_at', { ascending: false })
+  async getAllUsers(): Promise<WaitlistUser[]> {
+    const users = await prisma.waitlist.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
 
-    if (error) {
-      throw new Error(error.message)
-    }
-
-    return data
+    return users
   },
 
-  async getUserCount() {
-    const { count, error } = await supabase
-      .from('waitlist')
-      .select('*', { count: 'exact', head: true })
+  async getUserCount(): Promise<number> {
+    const count = await prisma.waitlist.count()
+    return count
+  },
 
-    if (error) {
-      throw new Error(error.message)
-    }
+  async getRecentUsers(limit: number = 10): Promise<WaitlistUser[]> {
+    const users = await prisma.waitlist.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: limit
+    })
 
-    return count || 0
+    return users
   }
 }
 

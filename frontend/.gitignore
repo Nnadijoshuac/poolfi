@@ -187,3 +187,4 @@ smart-contracts/typechain-types/
 
 # Cursor AI files
 .cursor/
+/lib/generated/prisma
