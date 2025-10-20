@@ -24,6 +24,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "react-hot-toast": "^2.4.1",
     "@prisma/client": "^6.17.1",
     "@rainbow-me/rainbowkit": "^2.0.0",
     "@supabase/supabase-js": "^2.75.1",
