@@ -1,10 +1,14 @@
 import { createClient } from '@supabase/supabase-js'
 import type { CreateWaitlistUser, WaitlistUser } from './database'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+function getSupabase() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Supabase URL and ANON key must be set')
+  }
+  return createClient(supabaseUrl, supabaseAnonKey)
+}
 
 // Waitlist service using Supabase
 export const waitlistService = {
@@ -12,6 +16,7 @@ export const waitlistService = {
     ipAddress?: string
     userAgent?: string
   }): Promise<WaitlistUser> {
+    const supabase = getSupabase()
     const { data, error } = await supabase
       .from('waitlist')
       .insert({
@@ -39,6 +44,7 @@ export const waitlistService = {
   },
 
   async getUserByEmail(email: string): Promise<WaitlistUser | null> {
+    const supabase = getSupabase()
     const { data, error } = await supabase
       .from('waitlist')
       .select('*')
@@ -61,6 +67,7 @@ export const waitlistService = {
   },
 
   async getAllUsers(): Promise<WaitlistUser[]> {
+    const supabase = getSupabase()
     const { data, error } = await supabase
       .from('waitlist')
       .select('*')
@@ -81,6 +88,7 @@ export const waitlistService = {
   },
 
   async getUserCount(): Promise<number> {
+    const supabase = getSupabase()
     const { count, error } = await supabase
       .from('waitlist')
       .select('*', { count: 'exact', head: true })
@@ -90,6 +98,7 @@ export const waitlistService = {
   },
 
   async getRecentUsers(limit: number = 10): Promise<WaitlistUser[]> {
+    const supabase = getSupabase()
     const { data, error } = await supabase
       .from('waitlist')
       .select('*')
