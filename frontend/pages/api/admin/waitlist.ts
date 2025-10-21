@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextApiRequest, NextApiResponse } from 'next'
 
-// Mock data for demonstration
+// Mock data for demonstration when Supabase is not configured
 const mockWaitlistData = [
   {
     id: '1',
@@ -34,32 +34,42 @@ const mockWaitlistData = [
   }
 ]
 
-export async function GET(request: NextRequest) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' })
+  }
+
   try {
     // Check for password in headers
-    const password = request.headers.get('x-admin-password')
+    const password = req.headers['x-admin-password'] as string
     const expectedPassword = process.env.ADMIN_PASSWORD || 'Po0lf!_admIn'
     
     if (!password || password !== expectedPassword) {
-      return NextResponse.json(
-        { error: 'Unauthorized access' },
-        { status: 401 }
-      )
+      return res.status(401).json({ error: 'Unauthorized access' })
     }
 
-    // Return mock data
-    return NextResponse.json({
+    // Check if Supabase is configured
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return res.status(200).json({
+        success: true,
+        data: mockWaitlistData,
+        count: mockWaitlistData.length,
+        message: 'Supabase not configured. Showing mock data. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.'
+      })
+    }
+
+    // For now, just return mock data since Supabase is not configured
+    return res.status(200).json({
       success: true,
       data: mockWaitlistData,
       count: mockWaitlistData.length,
-      message: 'Showing mock waitlist data. Supabase not configured.'
+      message: 'Supabase not configured. Showing mock data. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.'
     })
-    
   } catch (error) {
     console.error('Admin waitlist fetch error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch waitlist data' },
-      { status: 500 }
-    )
+    return res.status(500).json({ error: 'Failed to fetch waitlist data' })
   }
 }
