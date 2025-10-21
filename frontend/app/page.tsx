@@ -13,6 +13,7 @@ export default function Home() {
   const [showWaitlistModal, setShowWaitlistModal] = useState(false)
 
   const handleGetStarted = () => {
+    console.log('Get Started button clicked!')
     setShowWaitlistModal(true)
   }
 

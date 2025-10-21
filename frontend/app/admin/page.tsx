@@ -30,8 +30,17 @@ export default function AdminPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('Login form submitted!')
     setLoading(true)
     setError('')
+
+    // Simple password check first
+    if (password !== 'Po0lf!_admIn') {
+      console.log('Invalid password entered:', password)
+      setError('Invalid password')
+      setLoading(false)
+      return
+    }
 
     try {
       const response = await fetch('/api/admin/waitlist', {
@@ -42,7 +51,16 @@ export default function AdminPage() {
 
       if (response.ok) {
         const data: AdminData = await response.json()
-        setWaitlistData(data.data)
+        console.log('API Response:', data) // Debug log
+        
+        // Convert date strings to Date objects
+        const processedData = data.data.map((user: any) => ({
+          ...user,
+          createdAt: new Date(user.createdAt),
+          updatedAt: new Date(user.updatedAt)
+        }))
+        
+        setWaitlistData(processedData)
         setIsAuthenticated(true)
         
         // Show message if Supabase is not configured
@@ -50,10 +68,12 @@ export default function AdminPage() {
           setConfigMessage(data.message)
         }
       } else {
-        setError('Invalid password')
+        const errorData = await response.json()
+        setError(errorData.error || 'API Error')
       }
     } catch (err) {
-      setError('Failed to authenticate')
+      console.error('Login error:', err)
+      setError('Failed to fetch data')
     } finally {
       setLoading(false)
     }
@@ -75,6 +95,9 @@ export default function AdminPage() {
     }
     return flags[country.toUpperCase()] || '🌍'
   }
+
+  // Debug log
+  console.log('Authentication state:', { isAuthenticated, waitlistData: waitlistData.length })
 
   if (!isAuthenticated) {
     return (
