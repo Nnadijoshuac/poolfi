@@ -67,7 +67,7 @@ export default function AdminPage() {
     return new Date(date).toLocaleString()
   }
 
-  const getCountryFlag = (country: string | null) => {
+  const getCountryFlag = (country: string | null | undefined) => {
     if (!country) return '🌍'
     // Simple flag mapping for common countries
     const flags: { [key: string]: string } = {
