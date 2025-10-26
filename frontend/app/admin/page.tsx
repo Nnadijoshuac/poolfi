@@ -26,21 +26,11 @@ export default function AdminPage() {
   const [waitlistData, setWaitlistData] = useState<WaitlistUser[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [configMessage, setConfigMessage] = useState('')
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Login form submitted!')
     setLoading(true)
     setError('')
-
-    // Simple password check first
-    if (password !== 'Po0lf!_admIn') {
-      console.log('Invalid password entered:', password)
-      setError('Invalid password')
-      setLoading(false)
-      return
-    }
 
     try {
       const response = await fetch('/api/admin/waitlist', {
@@ -51,7 +41,6 @@ export default function AdminPage() {
 
       if (response.ok) {
         const data: AdminData = await response.json()
-        console.log('API Response:', data) // Debug log
         
         // Convert date strings to Date objects
         const processedData = data.data.map((user: any) => ({
@@ -62,18 +51,13 @@ export default function AdminPage() {
         
         setWaitlistData(processedData)
         setIsAuthenticated(true)
-        
-        // Show message if Supabase is not configured
-        if (data.message) {
-          setConfigMessage(data.message)
-        }
       } else {
         const errorData = await response.json()
-        setError(errorData.error || 'API Error')
+        setError(errorData.error || 'Authentication failed')
       }
     } catch (err) {
       console.error('Login error:', err)
-      setError('Failed to fetch data')
+      setError('Failed to authenticate. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -96,20 +80,28 @@ export default function AdminPage() {
     return flags[country.toUpperCase()] || '🌍'
   }
 
-  // Debug log
-  console.log('Authentication state:', { isAuthenticated, waitlistData: waitlistData.length })
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Admin Access
-          </h1>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+          <div className="text-center mb-6">
+            <img 
+              src="/logo.png" 
+              alt="PoolFi Logo" 
+              className="h-12 w-auto mx-auto mb-4"
+            />
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              PoolFi Admin
+            </h1>
+            <p className="text-gray-600 text-sm">
+              Access the waitlist dashboard
+            </p>
+          </div>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+                Admin Password
               </label>
               <input
                 type="password"
@@ -129,7 +121,7 @@ export default function AdminPage() {
               disabled={loading}
               className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
             >
-              {loading ? 'Authenticating...' : 'Login'}
+              {loading ? 'Authenticating...' : 'Access Dashboard'}
             </button>
           </form>
         </div>
@@ -138,32 +130,35 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow-md">
+        <div className="bg-white rounded-lg shadow-lg">
           <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-bold text-gray-900">
-                Waitlist Admin Dashboard
-              </h1>
-              <div className="text-sm text-gray-500">
-                Total Users: {waitlistData.length}
-              </div>
-            </div>
-            {configMessage && (
-              <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm text-yellow-800">{configMessage}</p>
-                  </div>
+              <div className="flex items-center space-x-4">
+                <img 
+                  src="/logo.png" 
+                  alt="PoolFi Logo" 
+                  className="h-10 w-auto"
+                />
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    PoolFi Waitlist Dashboard
+                  </h1>
+                  <p className="text-sm text-gray-600">
+                    Real-time user registration data
+                  </p>
                 </div>
               </div>
-            )}
+              <div className="text-right">
+                <div className="text-sm text-gray-500">
+                  Total Users: {waitlistData.length}
+                </div>
+                <div className="text-xs text-gray-400">
+                  Last updated: {new Date().toLocaleTimeString()}
+                </div>
+              </div>
+            </div>
           </div>
           
           <div className="overflow-x-auto">
@@ -189,7 +184,10 @@ export default function AdminPage() {
                     User Agent
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Joined
+                    Created
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Updated
                   </th>
                 </tr>
               </thead>
@@ -225,6 +223,9 @@ export default function AdminPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {formatDate(user.createdAt)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {formatDate(user.updatedAt)}
                     </td>
                   </tr>
                 ))}

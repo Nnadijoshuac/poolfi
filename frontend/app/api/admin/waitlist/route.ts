@@ -1,62 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-// Mock data for demonstration
-const mockWaitlistData = [
-  {
-    id: '1',
-    name: 'John Doe',
-    email: 'john@example.com',
-    country: 'US',
-    ipAddress: '192.168.1.1',
-    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-    createdAt: new Date('2024-01-15T10:30:00Z'),
-    updatedAt: new Date('2024-01-15T10:30:00Z')
-  },
-  {
-    id: '2',
-    name: 'Jane Smith',
-    email: 'jane@example.com',
-    country: 'UK',
-    ipAddress: '192.168.1.2',
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-    createdAt: new Date('2024-01-16T14:20:00Z'),
-    updatedAt: new Date('2024-01-16T14:20:00Z')
-  },
-  {
-    id: '3',
-    name: 'Mike Johnson',
-    email: 'mike@example.com',
-    country: 'CA',
-    ipAddress: '192.168.1.3',
-    userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36',
-    createdAt: new Date('2024-01-17T09:15:00Z'),
-    updatedAt: new Date('2024-01-17T09:15:00Z')
-  }
-]
+import { waitlistService } from '@/lib/supabase'
 
 export async function GET(request: NextRequest) {
   try {
     // Check for password in headers
     const password = request.headers.get('x-admin-password')
-    const expectedPassword = process.env.ADMIN_PASSWORD || 'Po0lf!_admIn'
+    const expectedPassword = process.env.ADMIN_PASSWORD
+    
+    // Ensure password is configured
+    if (!expectedPassword) {
+      console.error('ADMIN_PASSWORD environment variable not set')
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      )
+    }
     
     if (!password || password !== expectedPassword) {
       return NextResponse.json(
-        { error: 'Unauthorized access' },
+        { error: 'Unauthorized access fuck off you dumbass 🖕' },
         { status: 401 }
       )
     }
 
-    // Return mock data
+    // Get real data from Supabase
+    const allUsers = await waitlistService.getAllUsers()
+    const totalCount = await waitlistService.getUserCount()
+
     return NextResponse.json({
       success: true,
-      data: mockWaitlistData,
-      count: mockWaitlistData.length,
-      message: 'Showing mock waitlist data. Supabase not configured.'
+      data: allUsers,
+      count: totalCount,
+      message: 'Real waitlist data from Supabase'
     })
     
   } catch (error) {
-    console.error('Admin waitlist fetch error:', error)
+    console.error('Admin waitlist fetch error:', error instanceof Error ? error.message : 'Unknown error')
     return NextResponse.json(
       { error: 'Failed to fetch waitlist data' },
       { status: 500 }
