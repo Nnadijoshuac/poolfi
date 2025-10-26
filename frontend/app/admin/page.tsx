@@ -83,15 +83,15 @@ export default function AdminPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 sm:p-8">
           <div className="text-center mb-6">
             <img 
               src="/logo.png" 
               alt="PoolFi Logo" 
-              className="h-12 w-auto mx-auto mb-4"
+              className="h-10 sm:h-12 w-auto mx-auto mb-4"
             />
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
               PoolFi Admin
             </h1>
             <p className="text-gray-600 text-sm">
@@ -108,7 +108,7 @@ export default function AdminPage() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
                 placeholder="Enter admin password"
                 required
               />
@@ -119,7 +119,7 @@ export default function AdminPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 text-base"
             >
               {loading ? 'Authenticating...' : 'Access Dashboard'}
             </button>
@@ -131,26 +131,26 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <div className="bg-white rounded-lg shadow-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-4">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
+              <div className="flex items-center space-x-3 sm:space-x-4">
                 <img 
                   src="/logo.png" 
                   alt="PoolFi Logo" 
-                  className="h-10 w-auto"
+                  className="h-8 sm:h-10 w-auto"
                 />
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
+                  <h1 className="text-lg sm:text-2xl font-bold text-gray-900">
                     PoolFi Waitlist Dashboard
                   </h1>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-xs sm:text-sm text-gray-600">
                     Real-time user registration data
                   </p>
                 </div>
               </div>
-              <div className="text-right">
+              <div className="text-left sm:text-right">
                 <div className="text-sm text-gray-500">
                   Total Users: {waitlistData.length}
                 </div>
@@ -161,7 +161,8 @@ export default function AdminPage() {
             </div>
           </div>
           
-          <div className="overflow-x-auto">
+          {/* Desktop Table View */}
+          <div className="hidden lg:block overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -231,6 +232,48 @@ export default function AdminPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="lg:hidden">
+            <div className="space-y-4 p-4">
+              {waitlistData.map((user, index) => (
+                <div key={user.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center space-x-3">
+                      <div className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full">
+                        #{index + 1}
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-900">{user.name}</h3>
+                        <p className="text-xs text-gray-500">{user.email}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <span className="mr-1">{getCountryFlag(user.country)}</span>
+                      <span className="text-gray-600">{user.country || 'Unknown'}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <span className="font-medium text-gray-700">IP:</span>
+                      <span className="ml-1 text-gray-600">{user.ipAddress || 'Unknown'}</span>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-700">Created:</span>
+                      <span className="ml-1 text-gray-600">{formatDate(user.createdAt)}</span>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <span className="font-medium text-gray-700">Device:</span>
+                      <span className="ml-1 text-gray-600 text-xs break-all">
+                        {user.userAgent ? user.userAgent.substring(0, 60) + '...' : 'Unknown'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
           
           {waitlistData.length === 0 && (
