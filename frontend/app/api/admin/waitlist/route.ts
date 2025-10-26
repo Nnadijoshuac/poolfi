@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     
     if (!password || password !== expectedPassword) {
       return NextResponse.json(
-        { error: 'Unauthorized access fuck off you dumbass 🖕' },
+        { error: 'Unauthorized access fuck off-you dumbass 🖕🖕🖕' },
         { status: 401 }
       )
     }
