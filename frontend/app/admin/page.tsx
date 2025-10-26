@@ -155,7 +155,7 @@ export default function AdminPage() {
                   Total Users: {waitlistData.length}
                 </div>
                 <div className="text-xs text-gray-400">
-                  Last updated: {new Date().toLocaleTimeString()}
+                  Last updated: {new Date().toLocaleTimeString()} (v2.1)
                 </div>
               </div>
             </div>
